@@ -1,0 +1,25 @@
+task runAll {
+    group = 'application'
+    description = 'サブプロジェクトを同期／非同期で起動'
+
+    // 非同期フラグに応じて、依存関係を評価フェーズで設定
+    if (project.hasProperty('runAll.async') && project.property('runAll.async') == 'true') {
+        // 非同期も依存関係だけで制御（Gradleの並列設定 org.gradle.parallel=true に任せる）
+        dependsOn ':tutorials-root:appRun',
+                  ':web-tutorial:appRun',
+                  ':aop-tutorial:appRun'
+    } else {
+        // 同期実行（依存関係順で実行）
+        dependsOn ':tutorials-root:appRun',
+                  ':web-tutorial:appRun',
+                  ':aop-tutorial:appRun'
+    }
+
+    doLast {
+        if (project.hasProperty('runAll.async') && project.property('runAll.async') == 'true') {
+            println "非同期でサブプロジェクトを起動（Gradle並列に任せる）"
+        } else {
+            println "同期で依存関係通りに実行しました"
+        }
+    }
+}

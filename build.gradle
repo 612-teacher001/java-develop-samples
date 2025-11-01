@@ -1,0 +1,57 @@
+// ======================================
+// ルートプロジェクト: 管理専用 build.gradle
+// ======================================
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.gretty:gretty:4.0.3'
+    }
+}
+// サブプロジェクトに共通設定を一括適用
+subprojects {
+    // サブプロジェクトに必要なプラグインを適用
+    apply plugin: 'java'
+    apply plugin: 'war'
+    apply plugin: 'eclipse-wtp'
+    apply plugin: 'org.gretty'
+
+    // サブプロジェクト共通スクリプト読み込み
+    apply from: rootProject.file('scripts/java/index.gradle')
+    apply from: rootProject.file('scripts/repositories/index.gradle')
+    apply from: rootProject.file('scripts/dependencies/index.gradle')
+    apply from: rootProject.file('scripts/testing/index.gradle')
+    apply from: rootProject.file('scripts/eclipse/index.gradle')
+    apply from: rootProject.file('scripts/gretty/index.gradle')
+    apply from: rootProject.file('scripts/tasks/index.gradle')
+    
+	gretty {
+		servletContainer = 'tomcat10'
+	}
+	
+	sourceSets {
+	    main {
+	        java {
+	            srcDirs = ['src/main/java']  // 複数指定可
+	        }
+	        resources {
+	            srcDirs = ['src/main/resources']
+	        }
+	    }
+	    test {
+	        java {
+	            srcDirs = ['src/test/java']
+	        }
+	        resources {
+	            srcDirs = ['src/test/resources']
+	        }
+	    }
+	}
+
+}
+
+// DB初期化タスクをルートプロジェクトだけで実行
+apply from: rootProject.file('scripts/tasks/index.gradle')
+

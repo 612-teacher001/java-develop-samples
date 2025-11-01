@@ -1,0 +1,6 @@
+dependencies {
+    // JUnit / Mockito / Hamcrest
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}

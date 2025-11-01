@@ -1,0 +1,1 @@
+apply from: rootProject.file('scripts/java/java-toolchain.gradle')

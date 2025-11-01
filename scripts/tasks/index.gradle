@@ -1,0 +1,4 @@
+if (project == rootProject) {
+	apply from: rootProject.file('scripts/tasks/db.gradle')
+	apply from: rootProject.file('scripts/tasks/runAll.gradle')
+}

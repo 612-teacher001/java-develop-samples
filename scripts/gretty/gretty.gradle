@@ -1,0 +1,12 @@
+// ==============================
+// Gretty設定（組み込みTomcat起動用）
+// ==============================
+gretty {
+    servletContainer = 'tomcat10'
+    httpPort = 8080
+    contextPath = '/'
+    // Java 21 のプレビュー機能が必要な場合に指定
+    jvmArgs = ['--enable-preview']
+    fastReload = true // ホットデプロイを実現
+}
+

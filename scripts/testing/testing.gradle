@@ -1,0 +1,7 @@
+testing {
+    suites {
+        test {
+            useJUnitJupiter()
+        }
+    }
+}

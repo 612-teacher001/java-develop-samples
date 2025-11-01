@@ -1,0 +1,34 @@
+// ==============================
+// DB操作タスク
+// ==============================
+// DB作成（スーパーユーザで実行）
+task createDatabase(type: Exec) {
+	environment 'PGPASSWORD', 'postgres'
+	commandLine 'psql',
+		'-U', 'postgres',
+		'-d', 'postgres',
+		'-f', "${rootDir}/sql/01_create_database.sql"
+}
+
+// DLL適用（一般ユーザ）
+task createTables(type: Exec) {
+	environment 'PGPASSWORD', 'himitu'
+	commandLine 'psql',
+		'-U', 'student',
+		'-d', 'jbasicdaodb',
+		'-f', "${rootDir}/sql/02_create_tables.sql"
+}
+
+// サンプルレコードの投入（一般ユーザ）
+task insertRecords(type: Exec) {
+	environment 'PGPASSWORD', 'himitu'
+	commandLine 'psql',
+		'-U', 'student',
+		'-d', 'jbasicdaodb',
+		'-f', "${rootDir}/sql/03_insert_records.sql"
+}
+
+// まとめて実行
+task initAll {
+	dependsOn tasks.createDatabase, tasks.createTables, tasks.insertRecords
+}

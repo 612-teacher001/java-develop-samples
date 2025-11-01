@@ -1,0 +1,7 @@
+// Javaのtoolchainなど基本設定
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // コンパイル JDK
+    }
+}
+

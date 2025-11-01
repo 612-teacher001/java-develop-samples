@@ -1,0 +1,4 @@
+dependencies {
+    // PostgreSQL JDBC
+    implementation 'org.postgresql:postgresql:42.7.3'
+}

@@ -1,0 +1,10 @@
+dependencies {
+    // Servlet / JSP
+    compileOnly 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
+    runtimeOnly 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+    testImplementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
+    
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.1'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+    
+}

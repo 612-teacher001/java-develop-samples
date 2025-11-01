@@ -1,0 +1,3 @@
+apply from: rootProject.file('scripts/dependencies/jsp-servlet.gradle')
+apply from: rootProject.file('scripts/dependencies/database.gradle')
+apply from: rootProject.file('scripts/dependencies/junit.gradle')

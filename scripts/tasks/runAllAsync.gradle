@@ -1,0 +1,20 @@
+// runAllAsync.gradle
+def subProjects = ['tutorials-root', 'web-tutorial', 'aop-tutorial']
+
+subProjects.each { sub ->
+    tasks.register("run_${sub}", GradleBuild) {
+        dir = file(sub)
+        tasks = ['appRun']
+    }
+}
+
+task runAllAsync {
+    group = 'application'
+    description = '全サブプロジェクトを非同期で起動する'
+
+    dependsOn subProjects.collect { "run_${it}" }
+
+    doLast {
+        println "全サブプロジェクトの起動タスクを依存関係として登録しました"
+    }
+}
