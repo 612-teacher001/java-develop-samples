@@ -1,15 +1,15 @@
 rootProject.name = 'java-develop-samples'
 
 // サブプロジェクト登録
-include 'dummy-project'
-// include 'products-cart-sample'
+// include 'dummy-project'
+include 'products-cart-sample'
 // include 'library-man-sample'
 // include 'reservation-sys-sample'
 // include 'sales-man-sample'
 
 // ディレクトリを明示的に指定
-project(':dummy-project').projectDir = file('apps/dummy-project')
-// project(':products-cart-sample').projectDir = file('apps/products-cart-sample')
+// project(':dummy-project').projectDir = file('apps/dummy-project')
+project(':products-cart-sample').projectDir = file('apps/products-cart-sample')
 // project(':library-man-sample').projectDir = file('apps/library-man-sample')
 // project(':reservation-sys-sample').projectDir = file('apps/reservation-sys-sample')
 // project(':sales-man-sample').projectDir = file('apps/sales-man-sample')

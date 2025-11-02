@@ -1,0 +1,42 @@
+html {
+  font-size: 62.5%;
+}
+html body {
+  color: dimgray;
+  font-size: 1.4rem;
+}
+
+#links table {
+  border-collapse: collapse;
+  border-collapse: 0;
+  border-width: 2px 0 2px 0;
+}
+#links table tr th, #links table tr td {
+  padding: 0.25rem 0.75rem;
+  border-width: 0 0 1px 0;
+}
+#links table tr th:first-child {
+  padding: 0.25rem 1.25rem;
+}
+#links table tr th:last-child {
+  padding-left: 1.75rem;
+  text-align: left;
+}
+#links table tr td:first-child {
+  padding: 0.25rem 1.25rem;
+}
+#links table tr td:not(:last-child) {
+  text-align: center;
+  font-family: "Source Code Pro", "Courier New", Courier, monospace;
+  font-size: 110%;
+  font-weight: normal;
+}
+#links table tr td:last-child {
+  padding-left: 1.75rem;
+}
+#links table tr.no-border td:first-child {
+  border-width: 0;
+}
+#links table tr.row-bold td {
+  font-weight: bold;
+}/*# sourceMappingURL=style.css.map */

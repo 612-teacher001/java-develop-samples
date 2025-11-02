@@ -1,0 +1,55 @@
+@charset "utf-8";
+@use "./partials/base";
+
+#links {
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  table {
+    border-collapse: collapse;
+    border-collapse: 0;
+    border-width: 2px 0 2px 0;
+    margin: 1.75rem 0;
+    tr {
+      th, td {
+        padding: 0.25rem 0.75rem; 
+        border-width: 0 0 1px 0;
+      }
+      th {
+        &:first-child {
+          padding: 0.25rem 1.25rem;
+        }
+        &:last-child {
+          padding-left: 1.75rem;
+          text-align: left;
+        }
+      }
+      td {
+        &:first-child {
+          padding: 0.25rem 1.25rem;
+        }
+        &:not(:last-child) {
+          text-align: center;
+          font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
+          font-size: 110%;
+          font-weight: normal;
+        }
+        &:last-child {
+          padding-left: 1.75rem;
+        }
+      }
+      &.no-border {
+        td:first-child {
+          border-width: 0;
+        }
+      }
+      &.row-bold {
+        td {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
