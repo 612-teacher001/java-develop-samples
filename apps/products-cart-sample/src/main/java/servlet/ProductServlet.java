@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet("/ProductServlet")
+@WebServlet({"/ProductServlet", "/ProductServlet/*"})
 public class ProductServlet extends HttpServlet {
 	
 	/**
@@ -21,12 +21,37 @@ public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * クラス定数
+	 */
+	// URL定数群
+	private static final String JSP_VIEWS_DIR = "/WEB-INF/views";
+	private static final String JSP_DEFAULT_PAGE = JSP_VIEWS_DIR + "/index.jsp";
+	private static final String JSP_PRODUCT_LIST = JSP_VIEWS_DIR + "/product/list.jsp";
+	
+	private static final String PATH_LIST = "/list";
+	
+	
+	/**
 	 * Get送信を受け付ける：URLが指定されて呼び出される場合またはformタグのmethod属性が「get」または省略されている場合に呼び出される
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		// リクエストの文字コードを設定
+		request.setCharacterEncoding("utf-8");
+		// パスインフォを取得
+		String pathInfo = request.getPathInfo();
 		// 遷移先URLを設定
-		String nextPath = "/WEB-INF/views/index.jsp";
+		String nextPath = JSP_DEFAULT_PAGE;
+		
+		switch (pathInfo) {
+		case PATH_LIST: // 商品一覧表示
+			nextPath = JSP_PRODUCT_LIST;
+			break;
+		default:
+			break;
+		}
+		
 		// 画面遷移実行オブジェクトを取得
 		RequestDispatcher dispatcher = request.getRequestDispatcher(nextPath);
 		// 画面遷移：フォワードの実行
