@@ -1,0 +1,11 @@
+@charset "utf-8";
+@use "./typography" as font;
+
+//==========================================================
+// 標準フォントサイズの文字数分のサイズ（単位：rem）を計算する
+//  @param  $scal フォントサイズでの文字数：省略した場合は1文字
+//  @return 引数に指定した文字数のサイズ（単位：rem）
+//==========================================================
+@function calcSizeScaledChar($scale: 1) {
+	@return $scale * font.$default-font-size;
+}

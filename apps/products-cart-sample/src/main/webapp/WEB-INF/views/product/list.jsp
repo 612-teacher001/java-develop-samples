@@ -15,6 +15,14 @@
 		</header>
 		<main id="top">
 			<article>
+				<section class="criteria">
+					<ul class="criteria__list--links">
+						<li><a href="${pageContext.request.contextPath}/ProductServlet/list">全商品</a></li>
+						<c:forEach items="${applicationScope.appCategories}" var="category">
+						<li><a href="${pageContext.request.contextPath}/ProductServlet/list?categoryId=${category.id}">${category.name}</a></li>
+						</c:forEach>
+					</ul>
+				</section>
 				<section class="result">
 					<table class="result__table">
 						<tr>

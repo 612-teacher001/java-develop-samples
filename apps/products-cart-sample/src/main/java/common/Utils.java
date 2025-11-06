@@ -13,5 +13,14 @@ public class Utils {
 	public static Boolean isNullOrEmpty(String target) {
 		return (target == null || target.isEmpty());
 	}
+
+	/**
+	 * nullかどうかを判定する
+	 * @param target 判定対象オブジェクト
+	 * @return nullの場合はtrue、それ以外はfalse
+	 */
+	public static boolean isNull(Object target) {
+		return (target == null);
+	}
 	
 }

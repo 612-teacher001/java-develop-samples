@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+//--------------------------
+// デフォルトフォントル定数群
+//--------------------------
+$default-font-scale: 62.5%;
+$default-font-size: 1.4rem;
+
+//--------------------------
+// フォントスケール定数群
+//--------------------------
+$small-font-scale: 1.4 / 1.6;
+$large-font-scale: 2 / 1.6;
+
+//--------------------------
+// フォントサイズ定数群
+//--------------------------
+$small-font-size: $default-font-size * $small-font-scale;
+$large-font-size: $default-font-size * $large-font-scale;
