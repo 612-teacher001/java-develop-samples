@@ -82,13 +82,23 @@ public class ProductServlet extends HttpServlet {
 		switch (pathInfo) {
 		case PATH_LIST: // 商品一覧表示
 			try (ProductDAO dao = new ProductDAO();) {
-				// 商品一覧用のすべての商品リストを取得
-				List<Product> productList = dao.findAll();
+				// リクエストパラメータを取得
+				String categoryIdString = request.getParameter("categoryId");
+				// リクエストパラメータによる処理の分岐
+				List<Product> productList = null;
+				if (categoryIdString != null) {
+					// リクエストパラメータのデータ型変換
+					int categoryId = Integer.parseInt(categoryIdString);
+					productList = dao.findByCategoryId(categoryId);
+				} else {
+					// 商品一覧用のすべての商品リストを取得
+					productList = dao.findAll();
+				}
 				// 商品リストをリクエストスコープに登録：次画面へのデータの引き継ぎ
 				request.setAttribute("productList", productList);
 				// 遷移先URLの設定
 				nextPath = JSP_PRODUCT_LIST;
-			} catch (DAOException e) {
+			} catch (DAOException | NumberFormatException e) {
 				// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
 				e.printStackTrace();
 				// あらためてServletExceptionをスロー
