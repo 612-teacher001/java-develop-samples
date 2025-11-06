@@ -4,4 +4,24 @@ html {
 html body {
   color: dimgray;
   font-size: 1.4rem;
+}
+
+.result__table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid dimgray;
+}
+.result__table th, .result__table td {
+  border: 1px solid dimgray;
+  padding: 0.25rem 0.75rem;
+}
+
+.result__table td:first-child {
+  text-align: center;
+}
+.result__table td[data-type=id] {
+  text-align: center;
+}
+.result__table td[data-type=number] {
+  text-align: right;
 }/*# sourceMappingURL=style.css.map */

@@ -40,7 +40,7 @@
 				<td>MLS003</td>
 				<td>vodka</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/ProductServlet/list">商品一覧画面の表示</a>
+					商品一覧画面の表示
 				</td>
 			</tr>
 			<tr class="no-border">
@@ -56,7 +56,7 @@
 				<td>MLS005</td>
 				<td>vodka</td>
 				<td>
-					すべての商品の一覧を表示する
+					<a href="${pageContext.request.contextPath}/ProductServlet/list">すべての商品の一覧を表示する</a>
 				</td>
 			</tr>
 			<tr class="no-border">

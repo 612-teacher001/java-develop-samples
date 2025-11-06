@@ -1,12 +1,3 @@
 @charset "utf-8";
-@use "../mixins/" as mixin;
-@forward "../mixins/" ;
-
-.result {
-  &__table {
-    @include mixin.table-list;
-  }
-  &__header, &__cell {
-    padding: 0.25rem 0.75rem;
-  }
-}
+@forward "./contents/";
+@forward "./structures/";
