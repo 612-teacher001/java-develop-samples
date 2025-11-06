@@ -25,6 +25,12 @@ html body {
   border: 1px solid dimgray;
   padding: 0.25rem 0.75rem;
 }
+.criteria__form {
+  line-height: 2;
+}
+.criteria__text--keyword {
+  width: 14rem;
+}
 .criteria__list--links {
   list-style-type: none;
   padding: 0;

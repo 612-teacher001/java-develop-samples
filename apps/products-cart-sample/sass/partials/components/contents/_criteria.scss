@@ -1,5 +1,6 @@
 @charset "utf-8";
 @use     "../structures/list" as list;
+@use     "../structures/input" as input;
 
 // =========================================
 // 検索条件リストの li スタイル
@@ -18,6 +19,14 @@
 }
 
 .criteria {
+	&__form {
+		line-height: 2;
+	}
+	&__text {
+		&--keyword {
+			@include input.setTextBox(10);
+		}
+	}
 	// 検索条件リスト
 	&__list {
 		&--links {
