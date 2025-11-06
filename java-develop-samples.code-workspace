@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "apps//products-cart-sample"
+			"path": "/apps//products-cart-sample"
 		}
 	],
 	"settings": {
@@ -12,7 +12,7 @@
 		"liveSassCompile.settings.formats": [{
 			"format": "expanded",
 			"extensionName": ".css",
-			"savePath": "/apps/products-cart-sample/src/main/webapp/staitc/css"
+			"savePath": "/apps/products-cart-sample/src/main/webapp/static/css"
 		}],
 		// 各サブプロジェクトの sass ディレクトリを基準にする
 		"liveSassCompile.settings.forceBaseDirectory": "/apps/products-cart-sample/sass",

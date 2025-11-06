@@ -32,7 +32,7 @@
 				<td>MLS002</td>
 				<td>gin</td>
 				<td>
-					システムの初期画面を表示する
+					<a href="${pageContect.request.contextPath}">システムの初期画面を表示する</a>
 				</td>
 			</tr>
 			<tr class="no-border">
@@ -56,7 +56,7 @@
 				<td>MLS005</td>
 				<td>vodka</td>
 				<td>
-					すべての商品の一覧を表示する
+					<a href="${pageContext.request.contextPath}/ProductServlet/list">すべての商品の一覧を表示する</a>
 				</td>
 			</tr>
 			<tr class="no-border">

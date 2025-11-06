@@ -1,0 +1,43 @@
+@charset "utf-8";
+
+// =========================================
+// 表組の基本スタイル：collapseスタイル
+//	@param なし
+// デフォルトは罫線を1本にまとめた表とする
+// 引数でseparateスタイルとの選択分岐に拡張可
+// =========================================
+@mixin setCollapsedTable() {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border: 1px solid dimgray;
+}
+
+// ======================================
+// セルの統一したセルスタイル
+//	@param $horizontal 左右のパディング幅
+//	@param $vertical 	 上下のパディング幅
+// ======================================
+@mixin setCellStyle($vertical: 0.25rem, $horizontal: 0.75rem) {
+	border: 1px solid dimgray;
+	padding: $vertical $horizontal;
+}
+
+//***************************************************************************
+// 表の汎用スタイル（リスト形式と個票形式）
+// プレースホルダで共通部分を定義：ただしリスト形式を表のデフォルトスタイルとみなす
+//***************************************************************************
+%table-list {
+  @include setCollapsedTable();
+  th, td {
+    @include setCellStyle();
+  }
+}
+
+%table-form {
+  @include setCollapsedTable();
+  &__label, &__value {
+    display: table-cell;
+    @include setCellStyle();
+  }
+}
+

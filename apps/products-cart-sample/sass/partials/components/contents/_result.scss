@@ -1,0 +1,19 @@
+@charset "utf-8";
+@use "../structures/" as *;
+
+.result {
+	&__table {
+		@extend %table-list; // 表の基本スタイルを内包させる
+		td {
+			&:first-child {
+				text-align: center;
+			}
+			&[data-type="id"] { // 中央寄せ：主キー列（商品ID）
+				text-align: center;
+			}
+			&[data-type="number"] { // 右寄せ：数値列（価格・数量）
+				text-align: right;
+			}
+		}
+	}
+}
