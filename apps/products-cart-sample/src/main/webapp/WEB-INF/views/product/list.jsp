@@ -16,6 +16,10 @@
 		<main id="top">
 			<article>
 				<section class="criteria">
+					<form action="${pageContext.request.contextPath}/ProductServlet/list" method="get">
+						<input type="text" name="keyword" placeholder="商品名" value="${requestScope.keyword}" />
+						<button>検索</button>
+					</form>
 					<ul class="criteria__list--links">
 						<li><a href="${pageContext.request.contextPath}/ProductServlet/list">全商品</a></li>
 						<c:forEach items="${applicationScope.appCategories}" var="category">
