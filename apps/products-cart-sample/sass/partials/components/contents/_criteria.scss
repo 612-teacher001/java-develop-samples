@@ -1,0 +1,28 @@
+@charset "utf-8";
+@use     "../structures/list" as list;
+
+// =========================================
+// 検索条件リストの li スタイル
+// ・横並び表示
+// ・左右マージン 0.25rem
+// ・ホバー時は太字
+// =========================================
+@mixin setCriteriaListItem() {
+	li {
+		display: inline;
+		margin: 0 0.25rem;
+		&:hover {
+			font-weight: bold;
+		}
+	}
+}
+
+.criteria {
+	// 検索条件リスト
+	&__list {
+		&--links {
+			@include list.list-no-markers;
+			@include setCriteriaListItem();
+		}
+	}
+}

@@ -15,6 +15,14 @@
 		</header>
 		<main id="top">
 			<article>
+				<section class="criteria">
+					<ul class="criteria__list--links">
+						<li><a href="${pageContext.request.contextPath}/ProductServlet/list">全商品</a></li>
+						<li><a href="${pageContext.request.contextPath}/ProductServlet/list?categoryId=1">本</a></li>
+						<li><a href="${pageContext.request.contextPath}/ProductServlet/list?categoryId=2">DVD</a></li>
+						<li><a href="${pageContext.request.contextPath}/ProductServlet/list?categoryId=3">ゲーム</a></li>
+					</ul>
+				</section>
 				<section class="result">
 					<table class="result__table">
 						<tr>
