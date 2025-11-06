@@ -1,5 +1,7 @@
 @charset "utf-8";
+@use "../../common/" as common;
 @use     "../structures/list" as list;
+@use     "../structures/input" as input;
 
 // =========================================
 // 検索条件リストの li スタイル
@@ -18,11 +20,25 @@
 }
 
 .criteria {
+	// 検索条件入力テキストボックス
+	&__text {
+		$length: 9;
+		&--keyword {
+			@include input.setTextBox($length);
+		}
+		&--price {
+			@include input.setTextBox($length);
+		}
+	}
 	// 検索条件リスト
 	&__list {
 		&--links {
 			@include list.list-no-markers;
 			@include setCriteriaListItem();
 		}
+	}
+	&__submit {
+		width: common.calcSizeScaledChar(3.5);
+		margin-left: common.calcSizeScaledChar(0.5);
 	}
 }
