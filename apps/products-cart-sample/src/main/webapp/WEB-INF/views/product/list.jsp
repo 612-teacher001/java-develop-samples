@@ -16,8 +16,8 @@
 		<main id="top">
 			<article>
 				<section class="criteria">
-					<form action="${pageContext.request.contextPath}/ProductServlet/list" method="post">
-						<input type="text" name="keyword" placeholder="商品名" />
+					<form action="${pageContext.request.contextPath}/ProductServlet/list" method="get">
+						<input type="text" name="keyword" placeholder="商品名" value="${requestScope.keyword}" />
 						<button>検索</button>
 					</form>
 					<ul class="criteria__list--links">

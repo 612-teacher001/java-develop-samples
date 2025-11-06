@@ -84,12 +84,16 @@ public class ProductServlet extends HttpServlet {
 			try (ProductDAO dao = new ProductDAO();) {
 				// リクエストパラメータを取得
 				String categoryIdString = request.getParameter("categoryId");
+				String keyword = request.getParameter("keyword");
 				// リクエストパラメータによる処理の分岐
 				List<Product> productList = null;
 				if (categoryIdString != null) {
 					// リクエストパラメータのデータ型変換
 					int categoryId = Integer.parseInt(categoryIdString);
 					productList = dao.findByCategoryId(categoryId);
+				} else if (!Utils.isNullOrEmpty(keyword)) {
+					productList = dao.findByNameLikeKeyword(keyword);
+					request.setAttribute("keyword", keyword);
 				} else {
 					// 商品一覧用のすべての商品リストを取得
 					productList = dao.findAll();
