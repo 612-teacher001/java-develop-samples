@@ -1,4 +1,5 @@
 @charset "utf-8";
+@use "../../common/" as common;
 @use     "../structures/list" as list;
 @use     "../structures/input" as input;
 
@@ -19,12 +20,14 @@
 }
 
 .criteria {
-	&__form {
-		line-height: 2;
-	}
+	// 検索条件入力テキストボックス
 	&__text {
+		$length: 9;
 		&--keyword {
-			@include input.setTextBox(10);
+			@include input.setTextBox($length);
+		}
+		&--price {
+			@include input.setTextBox($length);
 		}
 	}
 	// 検索条件リスト
@@ -33,5 +36,9 @@
 			@include list.list-no-markers;
 			@include setCriteriaListItem();
 		}
+	}
+	&__submit {
+		width: common.calcSizeScaledChar(3.5);
+		margin-left: common.calcSizeScaledChar(0.5);
 	}
 }

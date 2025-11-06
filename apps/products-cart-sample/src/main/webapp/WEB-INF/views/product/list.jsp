@@ -18,8 +18,8 @@
 				<section class="criteria">
 					<form class="criteria__form" action="${pageContext.request.contextPath}/ProductServlet/list" method="get">
 						<input type="text" class="criteria__text--keyword" name="keyword" placeholder="商品名" value="${requestScope.keyword}" /> /
-						<input type="number" class="criteria__text--price" name="maxPrice" placeholder="価格" value="${requestScope.maxPrice}" /><br />
-						<button class="input__button">検索</button>
+						<input type="number" class="criteria__text--price" name="maxPrice" placeholder="価格" value="${requestScope.maxPrice}" />
+						<button class="criteria__submit">検索</button>
 					</form>
 					<ul class="criteria__list--links">
 						<li><a href="${pageContext.request.contextPath}/ProductServlet/list">全商品</a></li>
