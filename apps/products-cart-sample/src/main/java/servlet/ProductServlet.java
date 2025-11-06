@@ -85,15 +85,27 @@ public class ProductServlet extends HttpServlet {
 				// リクエストパラメータを取得
 				String categoryIdString = request.getParameter("categoryId");
 				String keyword = request.getParameter("keyword");
+				String maxPriceString = request.getParameter("maxPrice");
 				// リクエストパラメータによる処理の分岐
 				List<Product> productList = null;
 				if (categoryIdString != null) {
 					// リクエストパラメータのデータ型変換
 					int categoryId = Integer.parseInt(categoryIdString);
 					productList = dao.findByCategoryId(categoryId);
-				} else if (!Utils.isNullOrEmpty(keyword)) {
+				} else if (!Utils.isNullOrEmpty(keyword) && Utils.isNullOrEmpty(maxPriceString)) {
 					productList = dao.findByNameLikeKeyword(keyword);
 					request.setAttribute("keyword", keyword);
+				} else if (Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
+					// リクエストパラメータのデータ型変換
+					int maxPrice = Integer.parseInt(maxPriceString);
+					productList = dao.findByPriceLessThanEqual(maxPrice);
+					request.setAttribute("maxPrice", maxPrice);
+				} else if (!Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
+					// リクエストパラメータのデータ型変換
+					int maxPrice = Integer.parseInt(maxPriceString);
+					productList = dao.findByNameLikeKeywordAndPriceLessThanEqual(keyword, maxPrice);
+					request.setAttribute("keyword", keyword);
+					request.setAttribute("maxPrice", maxPrice);
 				} else {
 					// 商品一覧用のすべての商品リストを取得
 					productList = dao.findAll();

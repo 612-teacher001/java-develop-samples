@@ -25,6 +25,12 @@ html body {
   border: 1px solid dimgray;
   padding: 0.25rem 0.75rem;
 }
+.criteria__text--keyword {
+  width: 12.6rem;
+}
+.criteria__text--price {
+  width: 12.6rem;
+}
 .criteria__list--links {
   list-style-type: none;
   padding: 0;
@@ -35,4 +41,8 @@ html body {
 }
 .criteria__list--links li:hover {
   font-weight: bold;
+}
+.criteria__submit {
+  width: 4.9rem;
+  margin-left: 0.7rem;
 }/*# sourceMappingURL=style.css.map */
