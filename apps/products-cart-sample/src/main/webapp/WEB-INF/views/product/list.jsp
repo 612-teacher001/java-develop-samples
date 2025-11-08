@@ -45,6 +45,7 @@
 						</tr>
 						</c:forEach>
 					</table>
+					<p><a href="${pageContext.request.contextPath}/ProductServlet/insert?action=entry">新規登録画面へ</a></p>
 				</section>
 			</article>
 		</main>

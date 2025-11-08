@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .ul__text--left {
   text-align: left;
 }
@@ -6,6 +7,9 @@
 }
 .ul__text--right, .result__table td[data-type=number] {
   text-align: right;
+}
+.ul__error {
+  color: tomato;
 }
 
 html {
@@ -45,4 +49,43 @@ html body {
 .criteria__submit {
   width: 4.9rem;
   margin-left: 0.7rem;
+}
+
+.entry__error {
+  color: tomato;
+  font-size: 95%;
+  line-height: 1.25;
+}
+.entry__table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid dimgray;
+}
+.entry__table__label, .entry__table__value {
+  display: table-cell;
+  border: 1px solid dimgray;
+  padding: 0.25rem 0.75rem;
+}
+.entry__table {
+  border-collapse: separate;
+  border-spacing: 1px;
+  border-width: 0;
+}
+.entry__table .table__label, .entry__table .table__value {
+  padding: 0.175rem 0.35rem;
+}
+.entry__table .table__label {
+  background-color: gainsboro;
+  padding: 0 0.35rem 0 1.05rem;
+  font-weight: normal;
+  text-align: right;
+}
+.entry__table .table__label::after {
+  content: "：";
+}
+.entry__nav {
+  margin: 0.35rem 1.05rem 1.75rem;
+}
+.entry__submit {
+  margin-left: 1.05rem;
 }/*# sourceMappingURL=style.css.map */

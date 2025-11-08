@@ -2,4 +2,6 @@
 @forward "./partials/utils/";
 @forward "./partials/base/";
 @forward "./partials/components/";
+@use "./partials/common/" as common;
+@use "./partials/components/structures/" as structures;
 

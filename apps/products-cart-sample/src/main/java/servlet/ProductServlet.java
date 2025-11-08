@@ -35,10 +35,18 @@ public class ProductServlet extends HttpServlet {
 	private static final String JSP_VIEWS_DIR = "/WEB-INF/views";
 	private static final String JSP_DEFAULT_PAGE = JSP_VIEWS_DIR + "/index.jsp";
 	private static final String JSP_PRODUCT_LIST = JSP_VIEWS_DIR + "/product/list.jsp";
+	private static final String JSP_PRODUCT_ENTRY = JSP_VIEWS_DIR + "/product/entry.jsp";
 	
-	private static final String PATH_LIST = "/list";
+	// 画面モード定数群
+	private static final String MODE_INSERT = "insert";
 	
-	private static final String KEY_CATEGORIES = "appCategories"; 
+	// パスパラメータ定数群
+	private static final String PATH_LIST   = "/list";
+	private static final String PATH_INSERT = "/" + MODE_INSERT; 
+	
+	// スコープ登録キー定数群
+	private static final String KEY_CATEGORIES = "appCategories";
+	private static final String KEY_ACTION_ENTRY = "entry";
 
 	/**
 	 * 初期化処理
@@ -80,6 +88,16 @@ public class ProductServlet extends HttpServlet {
 		String nextPath = JSP_DEFAULT_PAGE;
 		
 		switch (pathInfo) {
+		case PATH_INSERT: // 商品登録
+			// リクエストパラメータのactionキーを取得
+			String action = request.getParameter("action");
+			if (action.equals(KEY_ACTION_ENTRY)) {
+				// 画面モードをリクエストスコープに登録
+				request.setAttribute("mode", MODE_INSERT);
+				// 遷移先URLを設定
+				nextPath = JSP_PRODUCT_ENTRY;
+			}
+			break;
 		case PATH_LIST: // 商品一覧表示
 			try (ProductDAO dao = new ProductDAO();) {
 				// リクエストパラメータを取得

@@ -11,5 +11,8 @@
     &--right {
       text-align: right;
     }
-  } 
+  }
+  &__error {
+    color: tomato;
+  }
 }
