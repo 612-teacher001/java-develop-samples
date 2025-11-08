@@ -11,18 +11,14 @@
 		<!-- ページヘッダ領域 -->
 		<jsp:include page="../common/header.jsp" />
 
-		<!-- メインコンテンツ領域：商品登録画面 -->
-		<main id="entry">
+		<!-- メインコンテンツ領域：商品確認画面 -->
+		<main id="confirm">
 			<article>
 				<h2>商品登録</h2>
 				<section>
-					<ul class="entry__error">
-						<c:forEach items="${requestScope.errorList}" var="error">
-						<li>${error}</li>
-						</c:forEach>
-					</ul>
+					<p>以下の内容で登録しますか？</p>
 					<form action="${pageContext.request.contextPath}/ProductServlet/insert" method="post">
-						<table class="entry__table">
+						<table class="confirm__table">
 							<%-- 商品更新の場合は商品IDの表示が必要 --%>
 							<c:if test="${requestScope.mode ne 'insert'}">
 							<tr>
@@ -33,43 +29,36 @@
 							<tr>
 								<th class="table__label">商品カテゴリ</th>
 								<td class="table__value">
-									<select name="categoryId">
-										<c:forEach items="${applicationScope.appCategories}" var="category">
-											<c:choose>
-												<c:when test="${requestScope.categoryId == category.id}">
-													<option value="${category.id}" selected>${category.name}</option>
-												</c:when>
-												<c:otherwise>
-													<option value="${category.id}">${category.name}</option>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-									</select>
+									<c:forEach items="${applicationScope.appCategories}" var="category">
+										<c:if test="${requestScope.categoryId == category.id}">
+											${category.name}
+										</c:if>
+									</c:forEach>
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">商品名</th>
 								<td class="table__value">
-									<input type="text" name="name" placeholder="商品名" value="初代ゴジラ" />
+									${requestScope.name}
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">価格</th>
 								<td class="table__value">
-									<input type="number" name="price" placeholder="価格" value="2800" />
+									${requestScope.price}
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">数量</th>
 								<td class="table__value">
-									<input type="number" name="quantity" placeholder="数量" value="3" />
+									${requestScope.quantity}
 								</td>
 							</tr>
 						</table>
-						<div class="entry__nav">
+						<div class="confirm__nav">
 							<a href="${pageContext.request.contextPath}/ProductServlet/list">一覧画面に戻る</a>
-							<button class="entry__submit">確認画面へ</button>
-							<input type="hidden" name="action" value="confirm" />
+							<button class="confirm__submit">登録する</button>
+							<input type="hidden" name="action" value="execute" />
 						</div>
 					</form>
 				</section>

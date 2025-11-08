@@ -32,10 +32,11 @@ public class ProductServlet extends HttpServlet {
 	 * クラス定数
 	 */
 	// URL定数群
-	private static final String JSP_VIEWS_DIR = "/WEB-INF/views";
-	private static final String JSP_DEFAULT_PAGE = JSP_VIEWS_DIR + "/index.jsp";
-	private static final String JSP_PRODUCT_LIST = JSP_VIEWS_DIR + "/product/list.jsp";
-	private static final String JSP_PRODUCT_ENTRY = JSP_VIEWS_DIR + "/product/entry.jsp";
+	private static final String JSP_VIEWS_DIR       = "/WEB-INF/views";
+	private static final String JSP_DEFAULT_PAGE    = JSP_VIEWS_DIR + "/index.jsp";
+	private static final String JSP_PRODUCT_LIST    = JSP_VIEWS_DIR + "/product/list.jsp";
+	private static final String JSP_PRODUCT_ENTRY   = JSP_VIEWS_DIR + "/product/entry.jsp";
+	private static final String JSP_PRODUCT_CONFIRM = JSP_VIEWS_DIR + "/product/confirm.jsp";
 	
 	// 画面モード定数群
 	private static final String MODE_INSERT = "insert";
@@ -45,8 +46,10 @@ public class ProductServlet extends HttpServlet {
 	private static final String PATH_INSERT = "/" + MODE_INSERT; 
 	
 	// スコープ登録キー定数群
-	private static final String KEY_CATEGORIES = "appCategories";
-	private static final String KEY_ACTION_ENTRY = "entry";
+	private static final String KEY_CATEGORIES     = "appCategories";
+	private static final String KEY_ACTION         = "action";
+	private static final String KEY_ACTION_ENTRY   = "entry";
+	private static final String KEY_ACTION_CONFIRM = "confirm";
 
 	/**
 	 * 初期化処理
@@ -90,12 +93,28 @@ public class ProductServlet extends HttpServlet {
 		switch (pathInfo) {
 		case PATH_INSERT: // 商品登録
 			// リクエストパラメータのactionキーを取得
-			String action = request.getParameter("action");
+			String action = request.getParameter(KEY_ACTION);
+			// 画面モードをリクエストスコープに登録
+			request.setAttribute("mode", MODE_INSERT);
 			if (action.equals(KEY_ACTION_ENTRY)) {
-				// 画面モードをリクエストスコープに登録
-				request.setAttribute("mode", MODE_INSERT);
 				// 遷移先URLを設定
 				nextPath = JSP_PRODUCT_ENTRY;
+			} else if (action.equals(KEY_ACTION_CONFIRM)) {
+				// リクエストパラメータを取得
+				String categoryIdString = request.getParameter("categoryId");
+				String name = request.getParameter("name");
+				String priceString = request.getParameter("price");
+				String quantityString = request.getParameter("quantity");
+				
+				// リクエストスコープに登録：次画面への引き継ぎ
+				request.setAttribute("categoryId", categoryIdString);
+				request.setAttribute("name", name);
+				request.setAttribute("price", priceString);
+				request.setAttribute("quantity", quantityString);
+				
+				// 遷移先URLを設定
+				nextPath = JSP_PRODUCT_CONFIRM;
+				
 			}
 			break;
 		case PATH_LIST: // 商品一覧表示
