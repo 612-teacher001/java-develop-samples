@@ -301,6 +301,27 @@ public class ProductDAO extends BaseDAO {
 			throw new DAOException("レコードを取得に失敗しました。", e);
 		}
 	}
+	
+	/**
+	 * 商品を登録する
+	 * @param product 登録対象商品インスタンス
+	 * @throws DAOException データベース処理中にエラーが発生した場合
+	 */
+	public void store(Product product) throws DAOException {
+		try (PreparedStatement pstmt = this.conn.prepareStatement(SQL_INSERT_PRODUCT);) {
+			// パラメータバインディング
+			pstmt.setInt(1, product.getCategoryId());
+			pstmt.setString(2, product.getName());
+			pstmt.setInt(3, product.getPrice());
+			pstmt.setInt(4, product.getQuantity());
+			// SQLの実行
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示してDAOExceptionをスロー
+			e.printStackTrace();
+			throw new DAOException("レコードの登録に失敗しました。", e);
+		}
+	}
 
 	/**
 	 * 指定された価格の並び替え順ですべての商品をproductsテーブルから取得するSQLを取得する

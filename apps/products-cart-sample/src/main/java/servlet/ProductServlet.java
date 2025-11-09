@@ -52,6 +52,7 @@ public class ProductServlet extends HttpServlet {
 	private static final String KEY_ACTION         = "action";
 	private static final String KEY_ACTION_ENTRY   = "entry";
 	private static final String KEY_ACTION_CONFIRM = "confirm";
+	private static final String KEY_ACTION_EXECUTE = "execute";
 
 	/**
 	 * 初期化処理
@@ -98,10 +99,11 @@ public class ProductServlet extends HttpServlet {
 			String action = request.getParameter(KEY_ACTION);
 			// 画面モードをリクエストスコープに登録
 			request.setAttribute("mode", MODE_INSERT);
-			if (action.equals(KEY_ACTION_ENTRY)) {
+			// NPE対策：「定数.equals(変数)」の順で比較
+			if (KEY_ACTION_ENTRY.equals(action)) {
 				// 遷移先URLを設定
 				nextPath = JSP_PRODUCT_ENTRY;
-			} else if (action.equals(KEY_ACTION_CONFIRM)) {
+			} else if (KEY_ACTION_CONFIRM.equals(action)) {
 				// リクエストパラメータを取得
 				String categoryIdString = request.getParameter("categoryId");
 				String name = request.getParameter("name");
@@ -131,6 +133,30 @@ public class ProductServlet extends HttpServlet {
 					// 遷移先URLを設定
 					nextPath = JSP_PRODUCT_CONFIRM;
 				}
+			} else if (KEY_ACTION_EXECUTE.equals(action)) {
+				// リクエストパラメータを取得
+				int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+				String name = request.getParameter("name");
+				int price = Integer.parseInt(request.getParameter("price"));
+				int quantity = Integer.parseInt(request.getParameter("quantity"));
+				// リクエストパラメータから登録する商品をインスタンス化
+				Product product = new Product(categoryId, name, price, quantity);
+				try (ProductDAO dao = new ProductDAO();) {
+					// 商品登録の実行
+					dao.store(product);
+					// 商品一覧を取得
+					List<Product> productList = dao.findAll();
+					request.setAttribute("productList", productList);
+					// 遷移先URLの設定
+					nextPath = JSP_PRODUCT_LIST;
+				} catch (DAOException e) {
+					// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
+					e.printStackTrace();
+					// あらためてServletExceptionをスロー
+					throw new ServletException(e.getMessage(), e);
+				}
+			} else {
+				nextPath = JSP_DEFAULT_PAGE;
 			}
 			break;
 		case PATH_LIST: // 商品一覧表示
@@ -141,7 +167,7 @@ public class ProductServlet extends HttpServlet {
 				String maxPriceString = request.getParameter("maxPrice");
 				// リクエストパラメータによる処理の分岐
 				List<Product> productList = null;
-				if (categoryIdString != null) {
+				if (!Utils.isNullOrEmpty(categoryIdString)) {
 					// リクエストパラメータのデータ型変換
 					int categoryId = Integer.parseInt(categoryIdString);
 					productList = dao.findByCategoryId(categoryId);
@@ -175,6 +201,7 @@ public class ProductServlet extends HttpServlet {
 			}
 			break;
 		default:
+			nextPath = JSP_DEFAULT_PAGE;
 			break;
 		}
 		

@@ -59,6 +59,11 @@
 							<a href="${pageContext.request.contextPath}/ProductServlet/list">一覧画面に戻る</a>
 							<button class="confirm__submit">登録する</button>
 							<input type="hidden" name="action" value="execute" />
+							<%-- この画面では入力部品がないので登録処理するにはhiddenタグとして送信 --%>
+							<input type="hidden" name="categoryId" value="${requestScope.categoryId}" />
+							<input type="hidden" name="name" value="${requestScope.name}" />
+							<input type="hidden" name="price" value="${requestScope.price}" />
+							<input type="hidden" name="quantity" value="${requestScope.quantity}" />
 						</div>
 					</form>
 				</section>
