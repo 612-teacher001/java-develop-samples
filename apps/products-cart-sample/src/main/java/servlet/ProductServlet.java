@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -16,6 +17,7 @@ import common.Utils;
 import dao.CategoryDAO;
 import dao.ProductDAO;
 import dao.common.DAOException;
+import servlet.validator.Validator;
 
 /**
  * Servlet implementation class ProductServlet
@@ -112,9 +114,23 @@ public class ProductServlet extends HttpServlet {
 				request.setAttribute("price", priceString);
 				request.setAttribute("quantity", quantityString);
 				
-				// 遷移先URLを設定
-				nextPath = JSP_PRODUCT_CONFIRM;
+				// 入力値チェック
+				List<String> errorList = new ArrayList<>();
+				Validator.isRequiredAndPositiveInt("商品カテゴリ", categoryIdString, errorList);
+				Validator.isRequired("商品名", name, errorList);
+				Validator.isRequiredAndPositiveInt("価格", priceString, errorList);
+				Validator.isRequiredAndPositiveInt("数量", quantityString, errorList);
 				
+				// エラーの有無によって処理を分岐
+				if (errorList.size() > 0) {
+					// エラーメッセージをリクエストスコープに登録
+					request.setAttribute("errorList", errorList);
+					// 遷移先URLを設定
+					nextPath = JSP_PRODUCT_ENTRY;
+				} else {
+					// 遷移先URLを設定
+					nextPath = JSP_PRODUCT_CONFIRM;
+				}
 			}
 			break;
 		case PATH_LIST: // 商品一覧表示
