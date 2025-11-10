@@ -117,11 +117,7 @@ public class ProductServlet extends HttpServlet {
 				request.setAttribute("quantity", quantityString);
 				
 				// 入力値チェック
-				List<String> errorList = new ArrayList<>();
-				Validator.isRequiredAndPositiveInt("商品カテゴリ", categoryIdString, errorList);
-				Validator.isRequired("商品名", name, errorList);
-				Validator.isRequiredAndPositiveInt("価格", priceString, errorList);
-				Validator.isRequiredAndPositiveInt("数量", quantityString, errorList);
+				List<String> errorList = this.validateRequestInput(categoryIdString, name, priceString, quantityString);
 				
 				// エラーの有無によって処理を分岐
 				if (errorList.size() > 0) {
@@ -134,13 +130,7 @@ public class ProductServlet extends HttpServlet {
 					nextPath = JSP_PRODUCT_CONFIRM;
 				}
 			} else if (KEY_ACTION_EXECUTE.equals(action)) {
-				// リクエストパラメータを取得
-				int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-				String name = request.getParameter("name");
-				int price = Integer.parseInt(request.getParameter("price"));
-				int quantity = Integer.parseInt(request.getParameter("quantity"));
-				// リクエストパラメータから登録する商品をインスタンス化
-				Product product = new Product(categoryId, name, price, quantity);
+				Product product = this.parseProductFromRequest(request);
 				try (ProductDAO dao = new ProductDAO();) {
 					// 商品登録の実行
 					dao.store(product);
@@ -166,29 +156,7 @@ public class ProductServlet extends HttpServlet {
 				String keyword = request.getParameter("keyword");
 				String maxPriceString = request.getParameter("maxPrice");
 				// リクエストパラメータによる処理の分岐
-				List<Product> productList = null;
-				if (!Utils.isNullOrEmpty(categoryIdString)) {
-					// リクエストパラメータのデータ型変換
-					int categoryId = Integer.parseInt(categoryIdString);
-					productList = dao.findByCategoryId(categoryId);
-				} else if (!Utils.isNullOrEmpty(keyword) && Utils.isNullOrEmpty(maxPriceString)) {
-					productList = dao.findByNameLikeKeyword(keyword);
-					request.setAttribute("keyword", keyword);
-				} else if (Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
-					// リクエストパラメータのデータ型変換
-					int maxPrice = Integer.parseInt(maxPriceString);
-					productList = dao.findByPriceLessThanEqual(maxPrice);
-					request.setAttribute("maxPrice", maxPrice);
-				} else if (!Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
-					// リクエストパラメータのデータ型変換
-					int maxPrice = Integer.parseInt(maxPriceString);
-					productList = dao.findByNameLikeKeywordAndPriceLessThanEqual(keyword, maxPrice);
-					request.setAttribute("keyword", keyword);
-					request.setAttribute("maxPrice", maxPrice);
-				} else {
-					// 商品一覧用のすべての商品リストを取得
-					productList = dao.findAll();
-				}
+				List<Product> productList = this.findProducts(request, dao, categoryIdString, keyword, maxPriceString);
 				// 商品リストをリクエストスコープに登録：次画面へのデータの引き継ぎ
 				request.setAttribute("productList", productList);
 				// 遷移先URLの設定
@@ -218,6 +186,77 @@ public class ProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// デフォルトではこのメソッドが呼び出されても、doGetメソッドを呼び出すだけ
 		doGet(request, response);
+	}
+
+	/**
+	 * リクエストパラメータから商品インスタンスを生成する
+	 * @param request HttpServletRequestオブジェクト
+	 * @return 商品インスタンス
+	 */
+	private Product parseProductFromRequest(HttpServletRequest request) {
+		// リクエストパラメータを取得
+		int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+		String name = request.getParameter("name");
+		int price = Integer.parseInt(request.getParameter("price"));
+		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		// リクエストパラメータから登録する商品をインスタンス化
+		Product product = new Product(categoryId, name, price, quantity);
+		return product;
+	}
+
+	/**
+	 * リクエストパラメータをチェックする
+	 * @param  categoryIdString 商品カテゴリID
+	 * @param  name             商品名
+	 * @param  priceString      価格
+	 * @param  quantityString   数量
+	 * @return errorList        エラーメッセージリスト
+	 * 
+	 */
+	private List<String> validateRequestInput(String categoryIdString, String name, String priceString, String quantityString) {
+		List<String> errorList = new ArrayList<>();
+		Validator.isRequiredAndPositiveInt("商品カテゴリ", categoryIdString, errorList);
+		Validator.isRequired("商品名", name, errorList);
+		Validator.isRequiredAndPositiveInt("価格", priceString, errorList);
+		Validator.isRequiredAndPositiveInt("数量", quantityString, errorList);
+		return errorList;
+	}
+
+	/**
+	 * 商品を検索する
+	 * @param request          HttpServletRequestオブジェクト
+	 * @param dao              ProductDAOオブジェクト
+	 * @param categoryIdString 商品カテゴリID
+	 * @param keyword          検索キーワード
+	 * @param maxPriceString   価格上限値
+	 * @return                 商品リスト
+	 * @throws DAOException    データベース処理中に発生するDAO例外
+	 */
+	private List<Product> findProducts(HttpServletRequest request, ProductDAO dao, String categoryIdString, String keyword, String maxPriceString) throws DAOException {
+		List<Product> productList = new ArrayList<>();
+		if (!Utils.isNullOrEmpty(categoryIdString)) {
+			// リクエストパラメータのデータ型変換
+			int categoryId = Integer.parseInt(categoryIdString);
+			productList = dao.findByCategoryId(categoryId);
+		} else if (!Utils.isNullOrEmpty(keyword) && Utils.isNullOrEmpty(maxPriceString)) {
+			productList = dao.findByNameLikeKeyword(keyword);
+			request.setAttribute("keyword", keyword);
+		} else if (Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
+			// リクエストパラメータのデータ型変換
+			int maxPrice = Integer.parseInt(maxPriceString);
+			productList = dao.findByPriceLessThanEqual(maxPrice);
+			request.setAttribute("maxPrice", maxPrice);
+		} else if (!Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
+			// リクエストパラメータのデータ型変換
+			int maxPrice = Integer.parseInt(maxPriceString);
+			productList = dao.findByNameLikeKeywordAndPriceLessThanEqual(keyword, maxPrice);
+			request.setAttribute("keyword", keyword);
+			request.setAttribute("maxPrice", maxPrice);
+		} else {
+			// 商品一覧用のすべての商品リストを取得
+			productList = dao.findAll();
+		}
+		return productList;
 	}
 
 }
