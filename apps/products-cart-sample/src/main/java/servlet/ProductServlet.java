@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,10 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import bean.Category;
 import common.Utils;
-import dao.CategoryDAO;
-import dao.common.DAOException;
+import service.CategoryService;
 import service.ProductService;
 
 /**
@@ -40,33 +37,17 @@ public class ProductServlet extends HttpServlet {
 	private static final String PATH_LIST   = "/list";
 	private static final String PATH_INSERT = "/" + MODE_INSERT; 
 	
-	// スコープ登録キー定数群
-	private static final String KEY_CATEGORIES     = "appCategories";
-
 	/**
 	 * 初期化処理
 	 */
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		// アプリケーションスコープからカテゴリリストを取得
-		@SuppressWarnings("unchecked")
-		List<Category> categoryList = (List<Category>) getServletContext().getAttribute(KEY_CATEGORIES);
-		if (categoryList != null) {
-			// すでにカテゴリリストが存在する場合は初期化不要
-			return;
-		}
+		// サービス実行オブジェクトをインスタンス化
+		CategoryService service = new CategoryService();
+		// 商品カテゴリをアプリケーションスコープに登録
+		service.initializeCategoriesIfAbsent(getServletContext());
 		
-		try (CategoryDAO dao = new CategoryDAO();) {
-			categoryList = dao.findAll();
-			// アプリケーションスコープに登録
-			getServletContext().setAttribute(KEY_CATEGORIES, categoryList);
-		} catch (DAOException e) {
-			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
-			e.printStackTrace();
-			// あらためてServletExceptionをスロー
-			throw new ServletException(e.getMessage(), e);
-		}
 	}
 	
 	/**
