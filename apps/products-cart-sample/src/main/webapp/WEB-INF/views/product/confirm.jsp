@@ -23,14 +23,14 @@
 							<c:if test="${requestScope.mode ne 'insert'}">
 							<tr>
 								<th class="table__label">商品ID</th>
-								<td class="table__value">${requestScope.product.id}</td>
+								<td class="table__value">${sessionScope.product.id}</td>
 							</tr>
 							</c:if>
 							<tr>
 								<th class="table__label">商品カテゴリ</th>
 								<td class="table__value">
 									<c:forEach items="${applicationScope.appCategories}" var="category">
-										<c:if test="${requestScope.product.categoryId == category.id}">
+										<c:if test="${sessionScope.product.categoryId == category.id}">
 											${category.name}
 										</c:if>
 									</c:forEach>
@@ -39,19 +39,19 @@
 							<tr>
 								<th class="table__label">商品名</th>
 								<td class="table__value">
-									<c:out value="${requestScope.product.name}" />
+									<c:out value="${sessionScope.product.name}" />
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">価格</th>
 								<td class="table__value">
-									<c:out value="${requestScope.product.price}" />
+									<c:out value="${sessionScope.product.price}" />
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">数量</th>
 								<td class="table__value">
-									<c:out value="${requestScope.product.quantity}" />
+									<c:out value="${sessionScope.product.quantity}" />
 								</td>
 							</tr>
 						</table>
@@ -59,11 +59,6 @@
 							<a href="${pageContext.request.contextPath}/ProductServlet/list">一覧画面に戻る</a>
 							<button class="confirm__submit">登録する</button>
 							<input type="hidden" name="action" value="execute" />
-							<%-- この画面では入力部品がないので登録処理するにはhiddenタグとして送信 --%>
-							<input type="hidden" name="categoryId" value="${requestScope.product.categoryId}" />
-							<input type="hidden" name="name" value="${requestScope.product.name}" />
-							<input type="hidden" name="price" value="${requestScope.product.price}" />
-							<input type="hidden" name="quantity" value="${requestScope.product.quantity}" />
 						</div>
 					</form>
 				</section>

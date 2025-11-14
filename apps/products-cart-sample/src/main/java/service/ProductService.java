@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import bean.Product;
 import bean.form.ProductFormBean;
@@ -132,20 +133,24 @@ public class ProductService extends BaseService {
 		
 		// ProductFormBeanをインスタンス化
 		ProductFormBean formBean = new ProductFormBean(request);
-		// 取得したリクエストパラメータをリクエストスコープに登録
-		formBean.bindDtoToRequestAttributes(request);
 		
 		// 入力値チェック
-		List<String> errorList = formBean.validate();
+		formBean.validate();
 		
 		// エラーの有無によって処理を分岐
 		String nextPath = "";
-		if (errorList.size() > 0) {
+		if (formBean.hasError()) {
+			// 取得したリクエストパラメータをリクエストスコープに登録
+			formBean.bindDtoToRequestAttributes(request);
 			// エラーメッセージをリクエストスコープに登録
-			request.setAttribute("errorList", errorList);
+			request.setAttribute("errorList", formBean.getErrorList());
 			// 遷移先URLを設定
 			nextPath = JSP_PRODUCT_ENTRY;
 		} else {
+			// セッションスコープを取得
+			HttpSession session = request.getSession();
+			// 取得したリクエストパラメータをセッションスコープに登録
+			formBean.bindDtoToSessionAttributes(session);
 			// 遷移先URLを設定
 			nextPath = JSP_PRODUCT_CONFIRM;
 		}
@@ -160,17 +165,28 @@ public class ProductService extends BaseService {
 	 * @throws ServletException
 	 */
 	private String executeInsert(HttpServletRequest request) throws ServletException {
-		// ProductFormBeanをインスタンス化
-		ProductFormBean formBean = new ProductFormBean(request);
-		Product product = formBean.convertDtoToBean();
-		String nextPath = "";
+		
 		try (ProductDAO dao = new ProductDAO();) {
+			// ProductFormBeanをインスタンス化：ただし引数なしコンストラクタを呼び出してdtoフィールドの設定はスルー
+			ProductFormBean formBean = new ProductFormBean();
+			// セッションスコープから取得したProductDTOインスタンスをdtoフィールドに設定
+			formBean.setDtoFromSession(request);
+			// dtoフィールドをProductインスタンスに変換
+			Product product = formBean.convertDtoToBean();
+			// 取得したProductDTOインスタンスの存在を判定
+			if (Utils.isNull(product)) {
+				throw new IllegalStateException("システムエラーが発生しました。");
+			}
+			
 			// 商品登録の実行
 			dao.store(product);
+			// セッションスコープのproductキーを削除
+			formBean.removeProductFromSession(request);
+			
 			// 遷移先URLの設定
-			nextPath = REDIRECT_PRODUCT_LIST;
+			String nextPath = REDIRECT_PRODUCT_LIST;
 			return nextPath;
-		} catch (DAOException e) {
+		} catch (DAOException | IllegalStateException e) {
 			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
 			e.printStackTrace();
 			// あらためてServletExceptionをスロー
