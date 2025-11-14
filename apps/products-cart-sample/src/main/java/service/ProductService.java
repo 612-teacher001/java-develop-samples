@@ -7,11 +7,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import bean.Product;
+import bean.form.ProductFormBean;
 import common.Utils;
 import dao.ProductDAO;
 import dao.common.DAOException;
-import dto.ProductDTO;
-import servlet.validator.Validator;
 
 /**
  * 商品に関する業務を実行するサービスクラス
@@ -131,14 +130,13 @@ public class ProductService extends BaseService {
 	 */
 	private String showConfirmPage(HttpServletRequest request) {
 		
-		// リクエストパラメータを取得
-		ProductDTO dto = this.buildProductDtoFrom(request);
-		
-		// リクエストスコープに登録：次画面への引き継ぎ
-		this.setProductDtoTo(request, dto);
+		// ProductFormBeanをインスタンス化
+		ProductFormBean formBean = new ProductFormBean(request);
+		// 取得したリクエストパラメータをリクエストスコープに登録
+		formBean.bindDtoToRequestAttributes(request);
 		
 		// 入力値チェック
-		List<String> errorList = this.validateProductInputs(dto);
+		List<String> errorList = formBean.validate();
 		
 		// エラーの有無によって処理を分岐
 		String nextPath = "";
@@ -156,60 +154,15 @@ public class ProductService extends BaseService {
 	}
 
 	/**
-	 * ProductDTOインスタンスのフィールド値をリクエストスコープに登録する
-	 * @param request HttpServletRequetオブジェクト
-	 * @param dto ProductDTOインスタンス
-	 */
-	private void setProductDtoTo(HttpServletRequest request, ProductDTO dto) {
-		request.setAttribute("categoryId", dto.getCategoryId());
-		request.setAttribute("categoryName", dto.getCategoryName());
-		request.setAttribute("name", dto.getName());
-		request.setAttribute("price", dto.getPrice());
-		request.setAttribute("quantity", dto.getQuantity());
-	}
-
-	/**
-	 * リクエストパラメータからProductDTOインスタンスを生成する
-	 * @param  request HttpServletRequestオブジェクト
-	 * @return ProductDTOインスタンス
-	 */
-	private ProductDTO buildProductDtoFrom(HttpServletRequest request) {
-		ProductDTO dto = new ProductDTO();
-		dto.setCategoryId(request.getParameter("categoryId"));
-		dto.setCategoryName(request.getParameter("categoryName"));
-		dto.setName(request.getParameter("name"));
-		dto.setPrice(request.getParameter("price"));
-		dto.setQuantity(request.getParameter("quantity"));
-		return dto;
-	}
-
-	/**
-	 * リクエストパラメータをチェックする
-	 * @param  categoryIdString 商品カテゴリID
-	 * @param  name             商品名
-	 * @param  priceString      価格
-	 * @param  quantityString   数量
-	 * @return errorList        エラーメッセージリスト
-	 * 
-	 */
-	private List<String> validateProductInputs(ProductDTO dto) {
-		List<String> errorList = new ArrayList<>();
-		Validator.isRequiredAndPositiveInt("商品カテゴリ", dto.getCategoryId(), errorList);
-		Validator.isRequired("商品名", dto.getName(), errorList);
-		Validator.isRequiredAndPositiveInt("価格", dto.getPrice(), errorList);
-		Validator.isRequiredAndPositiveInt("数量", dto.getQuantity(), errorList);
-		return errorList;
-	}
-
-	/**
 	 * 商品を登録する
 	 * @param request HttpServletRequestオブジェクト
 	 * @return 商品一覧画面のパス
 	 * @throws ServletException
 	 */
 	private String executeInsert(HttpServletRequest request) throws ServletException {
-		ProductDTO dto = this.buildProductDtoFrom(request);
-		Product product = this.convertToProduct(dto);
+		// ProductFormBeanをインスタンス化
+		ProductFormBean formBean = new ProductFormBean(request);
+		Product product = formBean.convertDtoToBean();
 		String nextPath = "";
 		try (ProductDAO dao = new ProductDAO();) {
 			// 商品登録の実行
@@ -223,21 +176,6 @@ public class ProductService extends BaseService {
 			// あらためてServletExceptionをスロー
 			throw new ServletException(e.getMessage(), e);
 		}
-	}
-
-	/**
-	 * ProductDTOインスタンスからProductインスタンスに変換する
-	 * @param  dto ProductDTOインスタンス
-	 * @return Productインスタンス
-	 */
-	private Product convertToProduct(ProductDTO dto) {
-		int categoryId = Integer.parseInt(dto.getCategoryId());
-		String name = dto.getName();
-		int price = Integer.parseInt(dto.getPrice());
-		int quantity = Integer.parseInt(dto.getQuantity());
-		// リクエストパラメータから登録する商品をインスタンス化
-		Product product = new Product(categoryId, name, price, quantity);
-		return product;
 	}
 
 }

@@ -111,6 +111,21 @@ public class ProductDTO implements Serializable {
 		this.quantity = quantity;
 	}
 	
+	public int getCategoryIdAsInt() {
+		// インスタンス化された時点ですでにnullではないという前提でnullチェックは省略
+		return Integer.parseInt(this.categoryId);
+	}
+
+	public int getPriceAsInt() {
+		// インスタンス化された時点ですでにnullではないという前提でnullチェックは省略
+		return Integer.parseInt(this.price);
+	}
+
+	public int getQuantityAsInt() {
+		// インスタンス化された時点ですでにnullではないという前提でnullチェックは省略
+		return Integer.parseInt(this.quantity);
+	}
+	
 	/**
 	 * このオブジェクトの文字列表現を返す。
 	 * <br />
@@ -153,5 +168,5 @@ public class ProductDTO implements Serializable {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

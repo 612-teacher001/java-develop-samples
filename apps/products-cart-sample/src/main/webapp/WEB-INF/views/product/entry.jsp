@@ -36,7 +36,7 @@
 									<select name="categoryId">
 										<c:forEach items="${applicationScope.appCategories}" var="category">
 											<c:choose>
-												<c:when test="${requestScope.categoryId == category.id}">
+												<c:when test="${requestScope.product.categoryId == category.id}">
 													<option value="${category.id}" selected>${category.name}</option>
 												</c:when>
 												<c:otherwise>
@@ -50,19 +50,19 @@
 							<tr>
 								<th class="table__label">商品名</th>
 								<td class="table__value">
-									<input type="text" name="name" placeholder="商品名" value="初代ゴジラ" />
+									<input type="text" name="name" placeholder="商品名" value="<c:out value='${requestScope.product.name}' />" />
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">価格</th>
 								<td class="table__value">
-									<input type="number" name="price" placeholder="価格" value="2800" />
+									<input type="number" name="price" placeholder="価格" value="<c:out value='${requestScope.product.price}' />" />
 								</td>
 							</tr>
 							<tr>
 								<th class="table__label">数量</th>
 								<td class="table__value">
-									<input type="number" name="quantity" placeholder="数量" value="3" />
+									<input type="number" name="quantity" placeholder="数量" value="<c:out value='${requestScope.product.quantity}' />" />
 								</td>
 							</tr>
 						</table>
