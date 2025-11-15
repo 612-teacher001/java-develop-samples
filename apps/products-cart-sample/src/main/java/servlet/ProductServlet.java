@@ -1,21 +1,16 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import bean.Category;
-import bean.Product;
 import common.Utils;
-import dao.CategoryDAO;
-import dao.ProductDAO;
-import dao.common.DAOException;
+import service.CategoryService;
+import service.ProductService;
 
 /**
  * Servlet implementation class ProductServlet
@@ -32,38 +27,27 @@ public class ProductServlet extends HttpServlet {
 	 * クラス定数
 	 */
 	// URL定数群
-	private static final String JSP_VIEWS_DIR = "/WEB-INF/views";
-	private static final String JSP_DEFAULT_PAGE = JSP_VIEWS_DIR + "/index.jsp";
-	private static final String JSP_PRODUCT_LIST = JSP_VIEWS_DIR + "/product/list.jsp";
+	private static final String JSP_VIEWS_DIR       = "/WEB-INF/views";
+	private static final String JSP_DEFAULT_PAGE    = JSP_VIEWS_DIR + "/index.jsp";
 	
-	private static final String PATH_LIST = "/list";
+	// 画面モード定数群
+	private static final String MODE_INSERT = "insert";
 	
-	private static final String KEY_CATEGORIES = "appCategories"; 
-
+	// パスパラメータ定数群
+	private static final String PATH_LIST   = "/list";
+	private static final String PATH_INSERT = "/" + MODE_INSERT; 
+	
 	/**
 	 * 初期化処理
 	 */
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		// アプリケーションスコープからカテゴリリストを取得
-		@SuppressWarnings("unchecked")
-		List<Category> categoryList = (List<Category>) getServletContext().getAttribute(KEY_CATEGORIES);
-		if (categoryList != null) {
-			// すでにカテゴリリストが存在する場合は初期化不要
-			return;
-		}
+		// サービス実行オブジェクトをインスタンス化
+		CategoryService service = new CategoryService();
+		// 商品カテゴリをアプリケーションスコープに登録
+		service.initializeCategoriesIfAbsent(getServletContext());
 		
-		try (CategoryDAO dao = new CategoryDAO();) {
-			categoryList = dao.findAll();
-			// アプリケーションスコープに登録
-			getServletContext().setAttribute(KEY_CATEGORIES, categoryList);
-		} catch (DAOException e) {
-			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
-			e.printStackTrace();
-			// あらためてServletExceptionをスロー
-			throw new ServletException(e.getMessage(), e);
-		}
 	}
 	
 	/**
@@ -79,56 +63,24 @@ public class ProductServlet extends HttpServlet {
 		// 遷移先URLを設定
 		String nextPath = JSP_DEFAULT_PAGE;
 		
+		// サービス実行のインスタンス化
+		ProductService service = new ProductService();
+		
 		switch (pathInfo) {
+		case PATH_INSERT: // 商品登録
+			nextPath = service.insertProduct(request);
+			break;
 		case PATH_LIST: // 商品一覧表示
-			try (ProductDAO dao = new ProductDAO();) {
-				// リクエストパラメータを取得
-				String categoryIdString = request.getParameter("categoryId");
-				String keyword = request.getParameter("keyword");
-				String maxPriceString = request.getParameter("maxPrice");
-				// リクエストパラメータによる処理の分岐
-				List<Product> productList = null;
-				if (categoryIdString != null) {
-					// リクエストパラメータのデータ型変換
-					int categoryId = Integer.parseInt(categoryIdString);
-					productList = dao.findByCategoryId(categoryId);
-				} else if (!Utils.isNullOrEmpty(keyword) && Utils.isNullOrEmpty(maxPriceString)) {
-					productList = dao.findByNameLikeKeyword(keyword);
-					request.setAttribute("keyword", keyword);
-				} else if (Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
-					// リクエストパラメータのデータ型変換
-					int maxPrice = Integer.parseInt(maxPriceString);
-					productList = dao.findByPriceLessThanEqual(maxPrice);
-					request.setAttribute("maxPrice", maxPrice);
-				} else if (!Utils.isNullOrEmpty(keyword) && !Utils.isNullOrEmpty(maxPriceString)) {
-					// リクエストパラメータのデータ型変換
-					int maxPrice = Integer.parseInt(maxPriceString);
-					productList = dao.findByNameLikeKeywordAndPriceLessThanEqual(keyword, maxPrice);
-					request.setAttribute("keyword", keyword);
-					request.setAttribute("maxPrice", maxPrice);
-				} else {
-					// 商品一覧用のすべての商品リストを取得
-					productList = dao.findAll();
-				}
-				// 商品リストをリクエストスコープに登録：次画面へのデータの引き継ぎ
-				request.setAttribute("productList", productList);
-				// 遷移先URLの設定
-				nextPath = JSP_PRODUCT_LIST;
-			} catch (DAOException | NumberFormatException e) {
-				// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
-				e.printStackTrace();
-				// あらためてServletExceptionをスロー
-				throw new ServletException(e.getMessage(), e);
-			}
+			nextPath = service.showProductList(request);
 			break;
 		default:
+			nextPath = JSP_DEFAULT_PAGE;
 			break;
 		}
 		
-		// 画面遷移実行オブジェクトを取得
-		RequestDispatcher dispatcher = request.getRequestDispatcher(nextPath);
-		// 画面遷移：フォワードの実行
-		dispatcher.forward(request, response);
+		// 画面遷移
+		service.dispatch(request, response, nextPath);
+
 	}
 
 	/**

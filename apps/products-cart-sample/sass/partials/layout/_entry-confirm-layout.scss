@@ -1,0 +1,63 @@
+@charset "utf-8";
+@use "../common/" as common;
+@use "../components/structures/" as structures;
+
+//===========================
+// エラーメッセージ表示スタイル
+//===========================
+@mixin setErrorMessageStyle() {
+		color: tomato;
+		font-size: 95%;
+		line-height: 1.25;
+} 
+
+//==========================================
+// 登録画面と確認画面の共通のレイアウトスタイル
+//==========================================
+@mixin commonFormStyle() {
+	&__table {
+		@include structures.table-form();
+		& {
+			border-collapse: separate;
+			border-spacing: 1px;
+			border-width: 0;
+		}
+		.table {
+			&__label, &__value {
+				padding: common.calcSizeScaledChar(0.125) common.calcSizeScaledChar(0.25);
+			}
+			&__label {
+				background-color: gainsboro;
+				padding: 0 common.calcSizeScaledChar(0.25) 0 common.calcSizeScaledChar(0.75);
+				font-weight: normal;
+				text-align: right;
+				&::after {
+					content: "：";
+				}
+			}
+			&__value {
+				background-color: ghostwhite;
+				padding-left: common.calcSizeScaledChar(0.5);
+				padding-right: common.calcSizeScaledChar(0.75);
+			}
+		}
+	}
+	&__nav {
+		margin: common.calcSizeScaledChar(0.75) common.calcSizeScaledChar(0.75) common.calcSizeScaledChar(1.25);
+	}
+	&__submit {
+		margin-left: common.calcSizeScaledChar(0.75);
+	}
+}
+
+
+.entry {
+  @include commonFormStyle();
+	&__error {
+		@include setErrorMessageStyle();
+	}
+}
+
+.confirm {
+	@include commonFormStyle();
+}
