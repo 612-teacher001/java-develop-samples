@@ -13,7 +13,10 @@
 
 | バージョン | マイルストン | コードネーム | 変更日時        | 対象システム         | 機能対象 | 処理分類 | 内容                                                                          | 作成者         |
 | ---------- | ------------ | ------------ | --------------- | -------------------- | -------- | -------- | ----------------------------------------------------------------------------- | -------------- |
-| Ver.0.50   | MS027        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品削除 | 商品作事機能実装準備                                                          | 612-teacher001 |
+| Ver.0.51   | MS030        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品削除 | 商品を削除する                                                                | 612-teacher001 |
+|            | MS029        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品削除 | 商品削除処理の実装                                                            | 612-teacher001 |
+|            | MS028        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品削除 | 商品削除確認画面を表示する                                                    | 612-teacher001 |
+| Ver.0.50   | MS027        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品削除 | 商品削除機能実装準備                                                          | 612-teacher001 |
 | Ver.0.41   | MS026        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 商品を更新する                                                                | 612-teacher001 |
 |            | MS025        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 更新処理の実装                                                                | 612-teacher001 |
 |            | MS024        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | エラー処理                                                                    | 612-teacher001 |
