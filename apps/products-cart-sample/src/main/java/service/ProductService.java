@@ -25,9 +25,13 @@ public class ProductService extends BaseService {
 	private static final String JSP_PRODUCT_ENTRY     = JSP_VIEWS_DIR + "/product/entry.jsp";
 	private static final String JSP_PRODUCT_CONFIRM   = JSP_VIEWS_DIR + "/product/confirm.jsp";
 	private static final String REDIRECT_PRODUCT_LIST = "/ProductServlet/list";
+
+	private static final String JSP_PRODUCT_EDIT      = JSP_VIEWS_DIR + "/product/edit.jsp";
+	
 	
 	// 画面モード定数群
 	private static final String MODE_INSERT = "insert";
+	private static final String MODE_UPDATE = "update";
 	
 	private static final String KEY_ACTION         = "action";
 	private static final String KEY_ACTION_ENTRY   = "entry";
@@ -71,7 +75,8 @@ public class ProductService extends BaseService {
 	public String insertProduct(HttpServletRequest request) throws ServletException {
 		// リクエストパラメータのactionキーを取得
 		String action = request.getParameter(KEY_ACTION);
-		// 画面モードをリクエストスコープに登録
+		// 画面タイトルと画面モードをリクエストスコープに登録
+		request.setAttribute("title", "商品登録");
 		request.setAttribute("mode", MODE_INSERT);
 		// NPE対策：「定数.equals(変数)」の順で比較
 		String nextPath = "";
@@ -187,6 +192,54 @@ public class ProductService extends BaseService {
 			String nextPath = REDIRECT_PRODUCT_LIST;
 			return nextPath;
 		} catch (DAOException | IllegalStateException e) {
+			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
+			e.printStackTrace();
+			// あらためてServletExceptionをスロー
+			throw new ServletException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * 商品を更新する
+	 * @param request HttpServletRequestオブジェクト
+	 * @return 遷移先URL
+	 * @throws ServletException 受信したリクエストパラメータのデータ型変換に失敗した場合またはデータベース処理中に発生する例外を変換したServletException
+	 */
+	public String updateProduct(HttpServletRequest request) throws ServletException {
+		// リクエストパラメータのactionキーを取得
+		String action = request.getParameter(KEY_ACTION);
+		// 画面タイトルと画面モードをリクエストスコープに登録
+		request.setAttribute("title", "商品更新");
+		request.setAttribute("mode", MODE_UPDATE);
+		// NPE対策：「定数.equals(変数)」の順で比較
+		String nextPath = "";
+		if (KEY_ACTION_ENTRY.equals(action)) {
+			//　遷移先URLを設定：更新対象商品をID検索
+			nextPath = this.searchProductById(request);
+		} else {
+			nextPath = JSP_DEFAULT_PAGE;
+		}
+		//遷移先URLを返却
+		return nextPath;
+	}
+
+	/**
+	 * 商品をID検索する
+	 * @param request HttpServletRequestオブジェクト
+	 * @return 遷移先URL
+	 * @throws ServletException
+	 */
+	private String searchProductById(HttpServletRequest request) throws ServletException {
+		try (ProductDAO dao = new ProductDAO();) {
+			// リクエストパラメータを取得
+			int id = Integer.parseInt(request.getParameter("id"));
+			// 取得した商品IDで商品を取得
+			Product product = dao.findById(id);
+			// リクエストスコープに登録
+			request.setAttribute("product", product);
+			// 遷移先URLを返却
+			return JSP_PRODUCT_EDIT;
+		} catch (DAOException | NumberFormatException | IllegalStateException e) {
 			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
 			e.printStackTrace();
 			// あらためてServletExceptionをスロー

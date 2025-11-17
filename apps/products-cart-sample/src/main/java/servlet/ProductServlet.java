@@ -32,10 +32,12 @@ public class ProductServlet extends HttpServlet {
 	
 	// 画面モード定数群
 	private static final String MODE_INSERT = "insert";
+	private static final String MODE_UPDATE = "update";
 	
 	// パスパラメータ定数群
 	private static final String PATH_LIST   = "/list";
-	private static final String PATH_INSERT = "/" + MODE_INSERT; 
+	private static final String PATH_INSERT = "/" + MODE_INSERT;
+	private static final String PATH_UPDATE = "/" + MODE_UPDATE;
 	
 	/**
 	 * 初期化処理
@@ -67,6 +69,9 @@ public class ProductServlet extends HttpServlet {
 		ProductService service = new ProductService();
 		
 		switch (pathInfo) {
+		case PATH_UPDATE: // 商品更新
+			nextPath = service.updateProduct(request);
+			break;
 		case PATH_INSERT: // 商品登録
 			nextPath = service.insertProduct(request);
 			break;

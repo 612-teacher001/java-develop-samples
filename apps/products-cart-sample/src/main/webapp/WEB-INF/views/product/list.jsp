@@ -35,6 +35,7 @@
 							<th>商品名</th>
 							<th>価格</th>
 							<th>数量</th>
+							<th></th>
 						</tr>
 						<c:forEach items="${requestScope.productList}" var="product">
 						<tr>
@@ -42,6 +43,13 @@
 							<td>${product.name}</td>
 							<td data-type="number" class="td-price"><fmt:formatNumber value="${product.price}" pattern="###,### 円" /></td>
 							<td data-type="number" class="td-quantity">${product.quantity}</td>
+							<td>
+								<form action="${pageContext.request.contextPath}/ProductServlet/update" method="get">
+									<button class="input__button--submit">更新</button>
+									<input type="hidden" name="action" value="entry" />
+									<input type="hidden" name="id" value="${product.id}" />
+								</form>
+							</td>
 						</tr>
 						</c:forEach>
 					</table>

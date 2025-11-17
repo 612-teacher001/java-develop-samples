@@ -21,13 +21,13 @@
 						<li>${error}</li>
 						</c:forEach>
 					</ul>
-					<form action="${pageContext.request.contextPath}/ProductServlet/insert" method="post">
+					<form action="${pageContext.request.contextPath}/ProductServlet/update" method="post">
 						<table class="entry__table">
 							<%-- 商品更新の場合は商品IDの表示が必要 --%>
 							<c:if test="${requestScope.mode ne 'insert'}">
 							<tr>
 								<th class="table__label">商品ID</th>
-								<td class="table__value"></td>
+								<td class="table__value">${requestScope.product.id}</td>
 							</tr>
 							</c:if>
 							<tr>

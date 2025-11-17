@@ -35,6 +35,7 @@
 					<a href="${pageContect.request.contextPath}">システムの初期画面を表示する</a>
 				</td>
 			</tr>
+			<%--
 			<tr class="no-border">
 				<td></td>
 				<td>MLS003</td>
@@ -51,6 +52,7 @@
 					商品の全件取得
 				</td>
 			</tr>
+			--%>
 			<tr class="row-bold">
 				<td>Ver.0.20</td>
 				<td>MLS005</td>
@@ -59,6 +61,15 @@
 					<a href="${pageContext.request.contextPath}/ProductServlet/list">すべての商品の一覧を表示する</a>
 				</td>
 			</tr>
+			<tr class="row-bold">
+				<td>Ver.0.41</td>
+				<td>MLS022</td>
+				<td>turmeric</td>
+				<td>
+					<a href="${pageContext.request.contextPath}/ProductServlet/update?action=entry">商品更新画面を表示する</a>
+				</td>
+			</tr>
+			<%--
 			<tr class="no-border">
 				<td></td>
 				<td>MLS006</td>
@@ -131,6 +142,7 @@
 					価格上限による範囲検索の結果を表示する
 				</td>
 			</tr>
+			--%>
 		</table>
 	</body>
 </html>
