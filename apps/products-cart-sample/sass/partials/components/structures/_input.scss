@@ -4,3 +4,10 @@
 @mixin setTextBox($width: 5) {
   width: common.calcSizeScaledChar($width);
 }
+
+.input {
+  &__form {
+    display: inline;
+    padding: 0 common.calcSizeScaledChar(0.25);
+  }
+}

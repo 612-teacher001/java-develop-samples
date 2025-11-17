@@ -16,7 +16,7 @@
 			<article>
 				<h2>${requestScope.title}</h2>
 				<section>
-					<p>以下の内容で${requestScope.title}しますか？</p>
+					<p>以下の内容で${requestScope.jmode}しますか？</p>
 					<form action="${pageContext.request.contextPath}/ProductServlet/${requestScope.mode}" method="post">
 						<table class="confirm__table">
 							<%-- 商品更新の場合は商品IDの表示が必要 --%>

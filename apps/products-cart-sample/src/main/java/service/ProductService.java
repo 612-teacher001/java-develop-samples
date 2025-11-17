@@ -26,12 +26,10 @@ public class ProductService extends BaseService {
 	private static final String JSP_PRODUCT_CONFIRM   = JSP_VIEWS_DIR + "/product/confirm.jsp";
 	private static final String REDIRECT_PRODUCT_LIST = "/ProductServlet/list";
 
-	private static final String JSP_PRODUCT_EDIT      = JSP_VIEWS_DIR + "/product/edit.jsp";
-	
-	
 	// 画面モード定数群
 	private static final String MODE_INSERT = "insert";
 	private static final String MODE_UPDATE = "update";
+	private static final String MODE_DELETE = "delete";
 	
 	private static final String KEY_ACTION         = "action";
 	private static final String KEY_ACTION_ENTRY   = "entry";
@@ -120,6 +118,33 @@ public class ProductService extends BaseService {
 			nextPath = this.showConfirmPage(request);
 		} else if (KEY_ACTION_EXECUTE.equals(action)) {
 			nextPath = this.executeUpdate(request);
+		} else {
+			nextPath = JSP_DEFAULT_PAGE;
+		}
+		//遷移先URLを返却
+		return nextPath;
+	}
+
+	/**
+	 * 商品削除サービスを実行する
+	 * @param request HttpServletRequestオブジェクト
+	 * @return 遷移先URL
+	 * @throws ServletException 受信したリクエストパラメータのデータ型変換に失敗した場合またはデータベース処理中に発生する例外を変換したServletException
+	 */
+	public String deleteProduct(HttpServletRequest request) throws ServletException {
+		// リクエストパラメータのactionキーを取得
+		String action = request.getParameter(KEY_ACTION);
+		// 画面タイトルと画面モードをリクエストスコープに登録
+		request.setAttribute("title", "商品削除");
+		request.setAttribute("jmode", "削除");
+		request.setAttribute("mode", MODE_DELETE);
+		// NPE対策：「定数.equals(変数)」の順で比較
+		String nextPath = "";
+		if (KEY_ACTION_CONFIRM.equals(action)) {
+			this.searchProductById(request);
+			ProductFormBean formBean = new ProductFormBean();
+			formBean.setDtoFromRequestAttribute(request);
+			nextPath = JSP_PRODUCT_CONFIRM;
 		} else {
 			nextPath = JSP_DEFAULT_PAGE;
 		}
