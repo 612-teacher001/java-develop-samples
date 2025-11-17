@@ -16,8 +16,8 @@
 			<article>
 				<h2>${requestScope.title}</h2>
 				<section>
-					<p>以下の内容で登録しますか？</p>
-					<form action="${pageContext.request.contextPath}/ProductServlet/insert" method="post">
+					<p>以下の内容で${requestScope.title}しますか？</p>
+					<form action="${pageContext.request.contextPath}/ProductServlet/${requestScope.mode}" method="post">
 						<table class="confirm__table">
 							<%-- 商品更新の場合は商品IDの表示が必要 --%>
 							<c:if test="${requestScope.mode ne 'insert'}">
@@ -57,7 +57,7 @@
 						</table>
 						<div class="confirm__nav">
 							<a href="${pageContext.request.contextPath}/ProductServlet/list">一覧画面に戻る</a>
-							<button class="confirm__submit">登録する</button>
+							<button class="confirm__submit">${requestScope.jmode}する</button>
 							<input type="hidden" name="action" value="execute" />
 						</div>
 					</form>

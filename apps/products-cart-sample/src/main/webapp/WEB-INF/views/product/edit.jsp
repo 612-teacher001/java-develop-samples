@@ -15,6 +15,7 @@
 		<main id="entry">
 			<article>
 				<h2>${requestScope.title}</h2>
+				<p>更新画面です</p>
 				<section>
 					<ul class="entry__error">
 						<c:forEach items="${requestScope.errorList}" var="error">

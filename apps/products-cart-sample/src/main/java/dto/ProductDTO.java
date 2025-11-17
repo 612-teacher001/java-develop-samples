@@ -111,6 +111,13 @@ public class ProductDTO implements Serializable {
 		this.quantity = quantity;
 	}
 	
+	public int getIdAsInt() {
+		if (this.id == null) {
+			return 0;
+		}
+		return Integer.parseInt(id);
+	}
+	
 	public int getCategoryIdAsInt() {
 		// インスタンス化された時点ですでにnullではないという前提でnullチェックは省略
 		return Integer.parseInt(this.categoryId);

@@ -82,6 +82,7 @@ public class ProductService extends BaseService {
 		String action = request.getParameter(KEY_ACTION);
 		// 画面タイトルと画面モードをリクエストスコープに登録
 		request.setAttribute("title", "商品登録");
+		request.setAttribute("jmode", "登録");
 		request.setAttribute("mode", MODE_INSERT);
 		// NPE対策：「定数.equals(変数)」の順で比較
 		String nextPath = "";
@@ -108,6 +109,7 @@ public class ProductService extends BaseService {
 		String action = request.getParameter(KEY_ACTION);
 		// 画面タイトルと画面モードをリクエストスコープに登録
 		request.setAttribute("title", "商品更新");
+		request.setAttribute("jmode", "更新");
 		request.setAttribute("mode", MODE_UPDATE);
 		// NPE対策：「定数.equals(変数)」の順で比較
 		String nextPath = "";
@@ -116,6 +118,8 @@ public class ProductService extends BaseService {
 			nextPath = this.searchProductById(request);
 		} else if (KEY_ACTION_CONFIRM.equals(action)) {
 			nextPath = this.showConfirmPage(request);
+		} else if (KEY_ACTION_EXECUTE.equals(action)) {
+			nextPath = this.executeUpdate(request);
 		} else {
 			nextPath = JSP_DEFAULT_PAGE;
 		}
@@ -195,6 +199,30 @@ public class ProductService extends BaseService {
 	}
 
 	/**
+	 * 商品をID検索する
+	 * @param request HttpServletRequestオブジェクト
+	 * @return 遷移先URL
+	 * @throws ServletException
+	 */
+	private String searchProductById(HttpServletRequest request) throws ServletException {
+		try (ProductDAO dao = new ProductDAO();) {
+			// リクエストパラメータを取得
+			int id = Integer.parseInt(request.getParameter("id"));
+			// 取得した商品IDで商品を取得
+			Product product = dao.findById(id);
+			// リクエストスコープに登録
+			request.setAttribute("product", product);
+			// 遷移先URLを返却
+			return JSP_PRODUCT_ENTRY;
+		} catch (DAOException | NumberFormatException | IllegalStateException e) {
+			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
+			e.printStackTrace();
+			// あらためてServletExceptionをスロー
+			throw new ServletException(e.getMessage(), e);
+		}
+	}
+
+	/**
 	 * 商品を登録する
 	 * @param request HttpServletRequestオブジェクト
 	 * @return 商品一覧画面のパス
@@ -231,22 +259,34 @@ public class ProductService extends BaseService {
 	}
 
 	/**
-	 * 商品をID検索する
+	 * 商品を更新する
 	 * @param request HttpServletRequestオブジェクト
-	 * @return 遷移先URL
+	 * @return 商品一覧画面のパス
 	 * @throws ServletException
 	 */
-	private String searchProductById(HttpServletRequest request) throws ServletException {
+	private String executeUpdate(HttpServletRequest request) throws ServletException {
+		
 		try (ProductDAO dao = new ProductDAO();) {
-			// リクエストパラメータを取得
-			int id = Integer.parseInt(request.getParameter("id"));
-			// 取得した商品IDで商品を取得
-			Product product = dao.findById(id);
-			// リクエストスコープに登録
-			request.setAttribute("product", product);
-			// 遷移先URLを返却
-			return JSP_PRODUCT_EDIT;
-		} catch (DAOException | NumberFormatException | IllegalStateException e) {
+			// ProductFormBeanをインスタンス化：ただし引数なしコンストラクタを呼び出してdtoフィールドの設定はスルー
+			ProductFormBean formBean = new ProductFormBean();
+			// セッションスコープから取得したProductDTOインスタンスをdtoフィールドに設定
+			formBean.setDtoFromSession(request);
+			// dtoフィールドをProductインスタンスに変換
+			Product product = formBean.convertDtoToBean();
+			// 取得したProductDTOインスタンスの存在を判定
+			if (Utils.isNull(product)) {
+				throw new IllegalStateException("システムエラーが発生しました。");
+			}
+			
+			// 商品登録の実行
+			dao.store(product);
+			// セッションスコープのproductキーを削除
+			formBean.removeProductFromSession(request);
+			
+			// 遷移先URLの設定
+			String nextPath = REDIRECT_PRODUCT_LIST;
+			return nextPath;
+		} catch (DAOException e) {
 			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
 			e.printStackTrace();
 			// あらためてServletExceptionをスロー
