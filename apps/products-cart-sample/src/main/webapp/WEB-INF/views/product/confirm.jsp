@@ -24,6 +24,7 @@
 							<tr>
 								<th class="table__label">商品ID</th>
 								<td class="table__value">${sessionScope.product.id}</td>
+								<input type="hidden" name="id" value="${sessionScope.product.id}" />
 							</tr>
 							</c:if>
 							<tr>

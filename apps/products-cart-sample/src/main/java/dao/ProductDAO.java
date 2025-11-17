@@ -34,6 +34,7 @@ public class ProductDAO extends BaseDAO {
 	
 	private static final String SQL_INSERT_PRODUCT = "INSERT INTO products (category_id, name, price, quantity) VALUES (?, ?, ?, ?)";
 	private static final String SQL_UPDATE_PRODUCT = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
+	private static final String SQL_DELETE_PRODUCT_BY_ID = "DELETE FROM products WHERE id = ?";
 	
 	
 	/**
@@ -336,6 +337,19 @@ public class ProductDAO extends BaseDAO {
 			e.printStackTrace();
 			String operation = isUpdate ? "更新" : "登録";
 			throw new DAOException("レコードの" + operation + "に失敗しました。", e);
+		}
+	}
+
+	public void deleteById(int id) throws DAOException {
+		try (PreparedStatement pstmt = this.conn.prepareStatement(SQL_DELETE_PRODUCT_BY_ID)) {
+			// パラメータバインディング
+			pstmt.setInt(1, id);
+			// SQLの実行
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示してDAOExceptionをスロー
+			e.printStackTrace();
+			throw new DAOException("レコードの削除に失敗しました。", e);
 		}
 	}
 

@@ -145,11 +145,29 @@ public class ProductService extends BaseService {
 			ProductFormBean formBean = new ProductFormBean();
 			formBean.setDtoFromRequestAttribute(request);
 			nextPath = JSP_PRODUCT_CONFIRM;
+		} else if  (KEY_ACTION_EXECUTE.equals(action)) {
+			nextPath = this.executeDelete(request);
 		} else {
 			nextPath = JSP_DEFAULT_PAGE;
 		}
 		//遷移先URLを返却
 		return nextPath;
+	}
+
+	private String executeDelete(HttpServletRequest request) throws ServletException {
+		try (ProductDAO dao = new ProductDAO();) {
+			// リクエストパラメータを取得取得
+			int id = Integer.parseInt(request.getParameter("id"));
+			// 削除を実行
+			dao.deleteById(id);
+			// 遷移先URLを返却
+			return REDIRECT_PRODUCT_LIST;
+		} catch (DAOException | NumberFormatException e) {
+			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
+			e.printStackTrace();
+			// あらためてServletExceptionをスロー
+			throw new ServletException(e.getMessage(), e);
+		}
 	}
 
 	/**
