@@ -45,6 +45,8 @@ public class ProductService extends BaseService {
 	 * @throws ServletException
 	 */
 	public String showProductList(HttpServletRequest request) throws ServletException {
+		// セッションスコープのproductキーがあれば削除
+		SessionHelper.removeProductIfExists(request);
 		String nextPath = "";
 		try (ProductDAO dao = new ProductDAO();) {
 			// リクエストパラメータを取得
@@ -58,7 +60,10 @@ public class ProductService extends BaseService {
 			// 遷移先URLの設定
 			nextPath = JSP_PRODUCT_LIST;
 			return nextPath;
-		} catch (DAOException | NumberFormatException e) {
+		} catch (DAOException | NumberFormatException | IllegalStateException e) {
+			if (e instanceof IllegalStateException) {
+				this.showProductList(request);
+			}
 			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示
 			e.printStackTrace();
 			// あらためてServletExceptionをスロー
@@ -92,6 +97,32 @@ public class ProductService extends BaseService {
 		return nextPath;
 	}
 	
+	/**
+	 * 商品更新サービスを実行する
+	 * @param request HttpServletRequestオブジェクト
+	 * @return 遷移先URL
+	 * @throws ServletException 受信したリクエストパラメータのデータ型変換に失敗した場合またはデータベース処理中に発生する例外を変換したServletException
+	 */
+	public String updateProduct(HttpServletRequest request) throws ServletException {
+		// リクエストパラメータのactionキーを取得
+		String action = request.getParameter(KEY_ACTION);
+		// 画面タイトルと画面モードをリクエストスコープに登録
+		request.setAttribute("title", "商品更新");
+		request.setAttribute("mode", MODE_UPDATE);
+		// NPE対策：「定数.equals(変数)」の順で比較
+		String nextPath = "";
+		if (KEY_ACTION_ENTRY.equals(action)) {
+			//　遷移先URLを設定：更新対象商品をID検索
+			nextPath = this.searchProductById(request);
+		} else if (KEY_ACTION_CONFIRM.equals(action)) {
+			nextPath = this.showConfirmPage(request);
+		} else {
+			nextPath = JSP_DEFAULT_PAGE;
+		}
+		//遷移先URLを返却
+		return nextPath;
+	}
+
 	/**
 	 * 商品を検索する
 	 * @param request          HttpServletRequestオブジェクト
@@ -197,30 +228,6 @@ public class ProductService extends BaseService {
 			// あらためてServletExceptionをスロー
 			throw new ServletException(e.getMessage(), e);
 		}
-	}
-
-	/**
-	 * 商品を更新する
-	 * @param request HttpServletRequestオブジェクト
-	 * @return 遷移先URL
-	 * @throws ServletException 受信したリクエストパラメータのデータ型変換に失敗した場合またはデータベース処理中に発生する例外を変換したServletException
-	 */
-	public String updateProduct(HttpServletRequest request) throws ServletException {
-		// リクエストパラメータのactionキーを取得
-		String action = request.getParameter(KEY_ACTION);
-		// 画面タイトルと画面モードをリクエストスコープに登録
-		request.setAttribute("title", "商品更新");
-		request.setAttribute("mode", MODE_UPDATE);
-		// NPE対策：「定数.equals(変数)」の順で比較
-		String nextPath = "";
-		if (KEY_ACTION_ENTRY.equals(action)) {
-			//　遷移先URLを設定：更新対象商品をID検索
-			nextPath = this.searchProductById(request);
-		} else {
-			nextPath = JSP_DEFAULT_PAGE;
-		}
-		//遷移先URLを返却
-		return nextPath;
 	}
 
 	/**

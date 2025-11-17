@@ -14,7 +14,7 @@
 		<!-- メインコンテンツ領域：商品確認画面 -->
 		<main id="confirm">
 			<article>
-				<h2>商品登録</h2>
+				<h2>${requestScope.title}</h2>
 				<section>
 					<p>以下の内容で登録しますか？</p>
 					<form action="${pageContext.request.contextPath}/ProductServlet/insert" method="post">

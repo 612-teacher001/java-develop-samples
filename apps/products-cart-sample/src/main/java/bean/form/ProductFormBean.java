@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import bean.Product;
 import common.Utils;
 import dto.ProductDTO;
+import service.SessionHelper;
 import servlet.validator.Validator;
 
 public class ProductFormBean implements Serializable {
@@ -142,13 +143,9 @@ public class ProductFormBean implements Serializable {
 	 * セッションスコープからproductキーを削除する
 	 * @param request HttpServletRequestオブジェクト
 	 */
-	public void removeProductFromSession(HttpServletRequest request) {
+	public void removeProductFromSession(HttpServletRequest request) throws IllegalStateException {
 		// セッションスコープを取得
-		HttpSession session = request.getSession(false);
-		if (Utils.isNull(session)) {
-			throw new IllegalStateException("システムエラーが発生しました。");
-		}
-		session.removeAttribute("product");
+		SessionHelper.removeProductOrThrow(request);
 	}
 	
 }
