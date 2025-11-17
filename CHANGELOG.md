@@ -13,9 +13,9 @@
 
 | バージョン | マイルストン | コードネーム | 変更日時        | 対象システム         | 機能対象 | 処理分類 | 内容                                                                          | 作成者         |
 | ---------- | ------------ | ------------ | --------------- | -------------------- | -------- | -------- | ----------------------------------------------------------------------------- | -------------- |
-| Ver.0.41   | MS026        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 商品を更新する                                                | 612-teacher001 |
-|            | MS025        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 更新処理の実装                                                | 612-teacher001 |
-|            | MS024        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | エラー処理                                                | 612-teacher001 |
+| Ver.0.41   | MS026        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 商品を更新する                                                                | 612-teacher001 |
+|            | MS025        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 更新処理の実装                                                                | 612-teacher001 |
+|            | MS024        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | エラー処理                                                                    | 612-teacher001 |
 |            | MS023        | turmeric     | 2025-11-17 Mon. | product-cart-sammple | 商品管理 | 商品更新 | 商品更新確認画面を表示する                                                    | 612-teacher001 |
 |            | MS022        | turmeric     | 2025-11-16 Sun. | product-cart-sammple | 商品管理 | 商品更新 | 商品更新画面を表示する                                                        | 612-teacher001 |
 | Vre.0.40   | MS021        | paprika      | 2025-11-15 Sat. | product-cart-sammple | 商品管理 | 商品更新 | 商品更新機能実装準備                                                          | 612-teacher001 |
