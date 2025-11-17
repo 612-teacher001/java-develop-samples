@@ -149,5 +149,32 @@ public class ProductFormBean implements Serializable {
 		// セッションスコープを取得
 		SessionHelper.removeProductOrThrow(request);
 	}
+
+	/**
+	 * リクエストスコープのproductキーに格納されたProductインスタンスを
+	 * ProductDTOインスタンスに変換してセッションスコープに保存する
+	 * @param request HttpServletRequestオブジェクト
+	 */
+	public void setDtoFromRequestAttribute(HttpServletRequest request) {
+		Product bean = (Product) request.getAttribute("product");
+		ProductDTO dto = this.convertBeanToDto(bean);
+		SessionHelper.setProduct(request, dto);
+	}
+
+	/**
+	 * ProductインスタンスをProductDTOインスタンスに変換する
+	 * @param  bean Productインスタンス
+	 * @return ProductDTOインスタンス
+	 */
+	private ProductDTO convertBeanToDto(Product bean) {
+		String id = Integer.toString(bean.getId());
+		String categoryId = Integer.toString(bean.getCategoryId());
+		String name = bean.getName();
+		String price = Integer.toString(bean.getPrice());
+		String quantity = Integer.toString(bean.getQuantity());
+		ProductDTO dto = new ProductDTO(categoryId, name, price, quantity);
+		dto.setId(id);
+		return dto;
+	}
 	
 }

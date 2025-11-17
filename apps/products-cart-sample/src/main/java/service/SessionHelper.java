@@ -3,6 +3,8 @@ package service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import dto.ProductDTO;
+
 public class SessionHelper {
 
 	/**
@@ -47,6 +49,11 @@ public class SessionHelper {
 		if (session != null) {
 			session.removeAttribute(key);
 		}
+	}
+
+	public static void setProduct(HttpServletRequest request, ProductDTO dto) {
+		HttpSession session = request.getSession();
+		session.setAttribute("product", dto);
 	}
 	
 }

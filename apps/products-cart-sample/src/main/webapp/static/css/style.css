@@ -29,6 +29,11 @@ html body {
   border: 1px solid dimgray;
   padding: 0.25rem 0.75rem;
 }
+.input__form {
+  display: inline;
+  padding: 0 0.35rem;
+}
+
 .criteria__text--keyword {
   width: 12.6rem;
 }

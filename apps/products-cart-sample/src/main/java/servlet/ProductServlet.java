@@ -33,11 +33,13 @@ public class ProductServlet extends HttpServlet {
 	// 画面モード定数群
 	private static final String MODE_INSERT = "insert";
 	private static final String MODE_UPDATE = "update";
+	private static final String MODE_DELETE = "delete";
 	
 	// パスパラメータ定数群
 	private static final String PATH_LIST   = "/list";
 	private static final String PATH_INSERT = "/" + MODE_INSERT;
 	private static final String PATH_UPDATE = "/" + MODE_UPDATE;
+	private static final String PATH_DELETE = "/" + MODE_DELETE;
 	
 	/**
 	 * 初期化処理
@@ -69,6 +71,9 @@ public class ProductServlet extends HttpServlet {
 		ProductService service = new ProductService();
 		
 		switch (pathInfo) {
+		case PATH_DELETE: // 商品削除
+			nextPath = service.deleteProduct(request);
+			break;
 		case PATH_UPDATE: // 商品更新
 			nextPath = service.updateProduct(request);
 			break;
