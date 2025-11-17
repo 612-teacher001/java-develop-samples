@@ -44,9 +44,14 @@
 							<td data-type="number" class="td-price"><fmt:formatNumber value="${product.price}" pattern="###,### 円" /></td>
 							<td data-type="number" class="td-quantity">${product.quantity}</td>
 							<td>
-								<form action="${pageContext.request.contextPath}/ProductServlet/update" method="get">
+								<form class="input__form" action="${pageContext.request.contextPath}/ProductServlet/update" method="get">
 									<button class="input__button--submit">更新</button>
 									<input type="hidden" name="action" value="entry" />
+									<input type="hidden" name="id" value="${product.id}" />
+								</form>
+								<form class="input__form" action="${pageContext.request.contextPath}/ProductServlet/delete" method="get">
+									<button class="input__button--submit">削除</button>
+									<input type="hidden" name="action" value="confirm" />
 									<input type="hidden" name="id" value="${product.id}" />
 								</form>
 							</td>
