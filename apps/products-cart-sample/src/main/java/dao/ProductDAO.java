@@ -33,6 +33,7 @@ public class ProductDAO extends BaseDAO {
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
 	
 	private static final String SQL_INSERT_PRODUCT = "INSERT INTO products (category_id, name, price, quantity) VALUES (?, ?, ?, ?)";
+	private static final String SQL_UPDATE_PRODUCT = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
 	
 	
 	/**
@@ -308,18 +309,33 @@ public class ProductDAO extends BaseDAO {
 	 * @throws DAOException データベース処理中にエラーが発生した場合
 	 */
 	public void store(Product product) throws DAOException {
-		try (PreparedStatement pstmt = this.conn.prepareStatement(SQL_INSERT_PRODUCT);) {
+		
+		// 処理内容を判断してSQLを取得
+		String sql = SQL_INSERT_PRODUCT;
+		// 処理が更新かどうかを保持する変数を「登録（false）」で初期化
+		boolean isUpdate = false;
+		if (product.getId() > 0) {
+			sql = SQL_UPDATE_PRODUCT;
+			isUpdate = true;
+		}
+		
+		try (PreparedStatement pstmt = this.conn.prepareStatement(sql);) {
 			// パラメータバインディング
 			pstmt.setInt(1, product.getCategoryId());
 			pstmt.setString(2, product.getName());
 			pstmt.setInt(3, product.getPrice());
 			pstmt.setInt(4, product.getQuantity());
+			if (isUpdate) {
+				// INSERT文の場合：WHERE句のプレースホルダのパラメータバインディング
+				pstmt.setInt(5, product.getId());
+			}
 			// SQLの実行
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// 例外が発生した場合：スタックトレース（必要最低限のエラー情報）を表示してDAOExceptionをスロー
 			e.printStackTrace();
-			throw new DAOException("レコードの登録に失敗しました。", e);
+			String operation = isUpdate ? "更新" : "登録";
+			throw new DAOException("レコードの" + operation + "に失敗しました。", e);
 		}
 	}
 

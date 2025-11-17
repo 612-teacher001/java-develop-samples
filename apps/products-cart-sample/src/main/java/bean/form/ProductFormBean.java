@@ -34,6 +34,7 @@ public class ProductFormBean implements Serializable {
 	public ProductFormBean(HttpServletRequest request) {
 		// dtoフィールドに値を設定
 		this.dto = new ProductDTO();
+		this.dto.setId(request.getParameter("id"));
 		this.dto.setCategoryId(request.getParameter("categoryId"));
 		this.dto.setCategoryName(request.getParameter("categoryName"));
 		this.dto.setName(request.getParameter("name"));
@@ -97,12 +98,13 @@ public class ProductFormBean implements Serializable {
 	 */
 	public Product convertDtoToBean() {
 		// dtoフィールドの各値を取得
+		int id = this.dto.getIdAsInt();
 		int categoryId = this.dto.getCategoryIdAsInt();
 		String name = this.dto.getName();
 		int price = this.dto.getPriceAsInt();
 		int quantity = this.dto.getQuantityAsInt();
 		// リクエストパラメータから登録する商品をインスタンス化
-		Product product = new Product(categoryId, name, price, quantity);
+		Product product = new Product(id, categoryId, name, price, quantity);
 		return product;
 	}
 
